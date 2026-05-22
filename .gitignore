@@ -1,0 +1,26 @@
+.DS_Store
+target/
+*.log
+*.tmp
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# Local configuration
+.env
+application-local.properties
+
+# Uploaded or exported runtime files
+uploads/
+exports/
+
+# Generated handoff/build artifacts
+JJ jig toolings customer handoff package/
+JJ jig toolings customer handoff package.zip
+
+# Generated preview/dependency folders
+**/node_modules/
+**/docx-preview/

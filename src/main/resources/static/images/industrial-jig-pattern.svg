@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-label="Industrial jig blueprint background">
+  <defs>
+    <pattern id="smallGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#7d8da1" stroke-width="0.5" opacity="0.22"/>
+    </pattern>
+    <pattern id="grid" width="120" height="120" patternUnits="userSpaceOnUse">
+      <rect width="120" height="120" fill="url(#smallGrid)"/>
+      <path d="M 120 0 L 0 0 0 120" fill="none" stroke="#7d8da1" stroke-width="1.2" opacity="0.28"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1000" fill="#101820"/>
+  <rect width="1600" height="1000" fill="url(#grid)" opacity="0.48"/>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(160 130)" stroke="#c9d6e3" opacity="0.54">
+      <rect x="0" y="0" width="430" height="250" rx="20" stroke-width="5"/>
+      <circle cx="70" cy="65" r="28" stroke-width="5"/>
+      <circle cx="360" cy="65" r="28" stroke-width="5"/>
+      <circle cx="70" cy="185" r="28" stroke-width="5"/>
+      <circle cx="360" cy="185" r="28" stroke-width="5"/>
+      <path d="M135 55 H295 M135 125 H295 M135 195 H295" stroke-width="4"/>
+      <path d="M215 55 V195" stroke-width="3" opacity="0.7"/>
+      <text x="18" y="-20" fill="#c9d6e3" stroke="none" font-family="Arial, sans-serif" font-size="28">JIG BASE PLATE</text>
+    </g>
+
+    <g transform="translate(1030 135) rotate(-8)" stroke="#d8e2ea" opacity="0.46">
+      <path d="M0 75 H420" stroke-width="8"/>
+      <path d="M0 75 V10 H70 V75" stroke-width="8"/>
+      <path d="M420 75 V10 H350 V75" stroke-width="8"/>
+      <path d="M110 40 H310" stroke-width="4"/>
+      <path d="M140 20 V65 M180 20 V65 M220 20 V65 M260 20 V65" stroke-width="3"/>
+      <text x="125" y="118" fill="#d8e2ea" stroke="none" font-family="Arial, sans-serif" font-size="24">CALIPER CHECK</text>
+    </g>
+
+    <g transform="translate(840 560)" stroke="#cad6e0" opacity="0.42">
+      <path d="M0 0 H390 V230 H0 Z" stroke-width="4"/>
+      <path d="M35 45 H350 M35 95 H350 M35 145 H350 M35 195 H250" stroke-width="3"/>
+      <path d="M270 30 L350 110 L290 170 L210 90 Z" stroke-width="4"/>
+      <circle cx="280" cy="100" r="22" stroke-width="4"/>
+      <text x="30" y="-18" fill="#cad6e0" stroke="none" font-family="Arial, sans-serif" font-size="26">DRAWING REVISION</text>
+    </g>
+
+    <g transform="translate(235 660) rotate(12)" stroke="#d2dde8" opacity="0.45">
+      <path d="M40 20 C95 -20 150 30 120 85 L285 250 C305 270 305 305 282 328 C259 351 223 351 203 330 L38 165 C-18 194 -70 140 -30 84 L25 139 L88 76 Z" stroke-width="7"/>
+      <circle cx="244" cy="288" r="26" stroke-width="5"/>
+      <text x="70" y="390" fill="#d2dde8" stroke="none" font-family="Arial, sans-serif" font-size="26">MAINTENANCE TOOL</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title + ' - Jig &amp; Toolings Management System'}">Jig / Tooling Form - Jig &amp; Toolings Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/app.css" rel="stylesheet">
+    <style>
+        .zh-note {
+            color: #6c757d;
+            display: block;
+            font-size: 0.82em;
+            margin-top: 0.2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-light app-industrial-bg">
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">Jig &amp; Toolings Management</a>
+        <div class="d-flex align-items-center gap-2 ms-auto">
+            <a class="btn btn-outline-light btn-sm" href="/jigs">Jig / Tooling List</a>
+            <a class="btn btn-outline-light btn-sm" href="/account/password">Password</a>
+            <form method="post" action="/logout">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button class="btn btn-outline-light btn-sm" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+    <div class="mb-3">
+        <h1 class="h3 mb-1">
+            <span th:text="${title}">Add Jig / Tooling</span>
+            <span class="zh-note" th:text="${titleZh}">新增治具/模具</span>
+        </h1>
+        <p class="text-secondary mb-0">
+            Fill in the jig master data. Fields marked with * are required.
+            <span class="zh-note">請填寫治具主資料，標示 * 的欄位必填。</span>
+        </p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" th:action="${action}" th:object="${jigForm}" class="bg-white border rounded p-4">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label for="classification" class="form-label">Classification<span class="zh-note">分類</span></label>
+                <input id="classification" class="form-control" th:field="*{classification}" placeholder="Mouse">
+            </div>
+
+            <div class="col-md-4">
+                <label for="modelName" class="form-label">Model Name *<span class="zh-note">機種名稱</span></label>
+                <input id="modelName" class="form-control" th:field="*{modelName}" required>
+                <div class="text-danger small mt-1" th:errors="*{modelName}"></div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="jigName" class="form-label">Jig Name *<span class="zh-note">治具名稱</span></label>
+                <input id="jigName" class="form-control" th:field="*{jigName}" required>
+                <div class="text-danger small mt-1" th:errors="*{jigName}"></div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="customer" class="form-label">Customer<span class="zh-note">客戶</span></label>
+                <input id="customer" class="form-control" th:field="*{customer}">
+            </div>
+
+            <div class="col-md-4">
+                <label for="jigNo" class="form-label">Jig No. *<span class="zh-note">治具編號</span></label>
+                <div class="input-group mb-2">
+                    <span class="input-group-text">Prefix</span>
+                    <input id="jigNoPrefix" type="text" class="form-control" value="AM-ME" maxlength="5" pattern="[A-Za-z]{2}-[A-Za-z]{2}">
+                    <button id="nextJigNoButton" class="btn btn-outline-secondary" type="button">Get Next</button>
+                </div>
+                <input id="jigNo" class="form-control" th:field="*{jigNo}" placeholder="AM-ME-001 or AM-ME-001-02" required>
+                <div class="form-text">
+                    Default prefix is AM-ME. You can adjust the prefix or Jig No.; duplicate numbers are blocked when saving.
+                    <span class="zh-note">預設前綴為 AM-ME，可自行調整前綴或治具編號；儲存時會檢查不可重號。</span>
+                </div>
+                <div class="form-text">AM-ME-001-01 will be saved as AM-ME-001.</div>
+                <div id="nextJigNoMessage" class="form-text text-danger d-none"></div>
+                <div class="text-danger small mt-1" th:errors="*{jigNo}"></div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="assemblyLine" class="form-label">Ass'y Line<span class="zh-note">組裝線別</span></label>
+                <input id="assemblyLine" class="form-control" th:field="*{assemblyLine}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="quantity" class="form-label">Quantity *<span class="zh-note">數量</span></label>
+                <input id="quantity" type="number" min="0" class="form-control" th:field="*{quantity}" required>
+                <div class="text-danger small mt-1" th:errors="*{quantity}"></div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="status" class="form-label">Status *<span class="zh-note">狀態</span></label>
+                <select id="status" class="form-select" th:field="*{status}" required>
+                    <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.label + ' / ' + status.labelZh}">Normal / 正常存放</option>
+                </select>
+                <div class="form-text" sec:authorize="hasRole('ENGINEER') and !hasRole('ADMIN')">
+                    Scrap requires ADMIN approval.
+                    <span class="zh-note">報廢需由 ADMIN 核准。</span>
+                </div>
+                <div class="text-danger small mt-1" th:errors="*{status}"></div>
+            </div>
+
+            <div class="col-md-3">
+                <label for="startDate" class="form-label">Start Date<span class="zh-note">開始日期</span></label>
+                <input id="startDate" name="startDate" type="date" class="form-control"
+                       th:value="${jigForm.startDate != null ? #temporals.format(jigForm.startDate, 'yyyy-MM-dd') : ''}">
+            </div>
+
+            <div class="col-md-3">
+                <label for="dueDate" class="form-label">Due Date<span class="zh-note">到期日</span></label>
+                <input id="dueDate" name="dueDate" type="date" class="form-control"
+                       th:value="${jigForm.dueDate != null ? #temporals.format(jigForm.dueDate, 'yyyy-MM-dd') : ''}">
+            </div>
+
+            <div class="col-md-4">
+                <label for="dri" class="form-label">DRI<span class="zh-note">負責人</span></label>
+                <input id="dri" class="form-control" th:field="*{dri}" readonly>
+                <div class="form-text">
+                    Filled automatically from the login account.
+                    <span class="zh-note">由登入帳號自動帶入，不需手動填寫。</span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label for="mroNo" class="form-label">MRO No.<span class="zh-note">MRO 編號</span></label>
+                <input id="mroNo" class="form-control" th:field="*{mroNo}">
+            </div>
+
+            <div class="col-md-4">
+                <label for="prNo" class="form-label">PR No.<span class="zh-note">PR 編號</span></label>
+                <input id="prNo" class="form-control" th:field="*{prNo}">
+            </div>
+
+            <div class="col-12">
+                <label for="jigFile" class="form-label">
+                    Jig Pictures / Drawing Files
+                    <span class="zh-note">治具圖片或圖紙檔案</span>
+                </label>
+                <input id="jigFile" name="jigFiles" type="file" class="form-control" accept="image/*,.pdf,.dwg,.dxf,.step,.stp" multiple>
+                <input type="hidden" th:field="*{jigPictureUrl}">
+                <div class="form-text">
+                    Upload up to 5 jig photos, drawings, PDFs, or CAD files. Uploaded files can be downloaded later.
+                    <span class="zh-note">最多上傳 5 個治具照片、圖紙、PDF 或 CAD 檔，之後可下載。</span>
+                </div>
+                <div class="text-danger small mt-1" th:errors="*{jigFiles}"></div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <a class="btn btn-outline-secondary" href="/jigs">Cancel</a>
+            <button class="btn btn-primary" type="submit">Save Jig / Tooling</button>
+        </div>
+    </form>
+
+    <section th:if="${!#lists.isEmpty(currentFiles)}" class="bg-white border rounded p-4 mt-3">
+        <h2 class="h5 mb-3">
+            Current Files
+            <span class="zh-note">目前檔案</span>
+        </h2>
+        <ul class="list-group">
+            <li th:each="file : ${currentFiles}" class="list-group-item">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <span>
+                        <span th:text="${file.originalFilename}">drawing.pdf</span>
+                        <span class="text-secondary small" th:text="${'(' + file.fileSize + ' bytes)'}">(123 bytes)</span>
+                    </span>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a class="btn btn-outline-secondary btn-sm" th:href="@{/jigs/files/{id}/download(id=${file.id})}">Download</a>
+                        <form sec:authorize="hasAnyRole('ADMIN', 'SUPERVISOR')" method="post" th:action="@{/jigs/files/{id}/delete(id=${file.id})}">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <form sec:authorize="hasAnyRole('ADMIN', 'SUPERVISOR', 'ENGINEER')" method="post" enctype="multipart/form-data"
+                      th:action="@{/jigs/files/{id}/replace(id=${file.id})}" class="row g-2 align-items-end mt-2">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <div class="col-md-9">
+                        <label class="form-label small mb-1">
+                            Replace File
+                            <span class="zh-note">更換檔案</span>
+                        </label>
+                        <input name="replacementFile" type="file" class="form-control form-control-sm" accept="image/*,.pdf,.dwg,.dxf,.step,.stp" required>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-outline-primary btn-sm w-100" type="submit">Replace</button>
+                    </div>
+                    <div class="form-text" sec:authorize="hasRole('ENGINEER') and !hasRole('ADMIN')">
+                        Engineers can replace files, but delete requires SUPERVISOR or ADMIN.
+                        <span class="zh-note">ENGINEER 可更換檔案；刪除需 SUPERVISOR 或 ADMIN。</span>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </section>
+</main>
+<script>
+    const prefixInput = document.getElementById('jigNoPrefix');
+    const jigNoInput = document.getElementById('jigNo');
+    const nextButton = document.getElementById('nextJigNoButton');
+    const message = document.getElementById('nextJigNoMessage');
+
+    function setPrefixFromJigNo() {
+        const match = jigNoInput.value.trim().toUpperCase().match(/^([A-Z]{2}-[A-Z]{2})-/);
+        if (match) {
+            prefixInput.value = match[1];
+        }
+    }
+
+    async function fillNextJigNo() {
+        message.classList.add('d-none');
+        const prefix = prefixInput.value.trim().toUpperCase() || 'AM-ME';
+        prefixInput.value = prefix;
+        try {
+            const response = await fetch(`/jigs/next-no?prefix=${encodeURIComponent(prefix)}`);
+            if (!response.ok) {
+                throw new Error(await response.text());
+            }
+            jigNoInput.value = await response.text();
+        } catch (error) {
+            message.textContent = error.message || 'Unable to get next Jig No.';
+            message.classList.remove('d-none');
+        }
+    }
+
+    setPrefixFromJigNo();
+    nextButton.addEventListener('click', fillNextJigNo);
+</script>
+</body>
+</html>

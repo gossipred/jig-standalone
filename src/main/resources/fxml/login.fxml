@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.login.LoginController"
+      styleClass="login-root">
+
+    <!-- Left panel: branding + description -->
+    <VBox styleClass="login-left" HBox.hgrow="ALWAYS" spacing="0">
+        <padding>
+            <Insets top="48" right="48" bottom="40" left="48"/>
+        </padding>
+
+        <Label text="FIXTURE CONTROL / MAINTENANCE RECORDS" styleClass="login-left-tag"/>
+        <Region prefHeight="28"/>
+        <Label text="Jig &amp; Toolings" styleClass="login-left-title"/>
+        <Label text="Management System" styleClass="login-left-title"/>
+        <Label text="治具及模具管理系統" styleClass="login-left-title-zh"/>
+        <Region prefHeight="20"/>
+        <Label text="Search jig data, check assembly line status, download drawings,"
+               styleClass="login-left-desc"/>
+        <Label text="and review maintenance history in one place."
+               styleClass="login-left-desc"/>
+        <Region prefHeight="4"/>
+        <Label text="集中查詢治具資料、組裝線別、圖紙附件與維修異動紀錄。"
+               styleClass="login-left-desc-zh"/>
+        <Region VBox.vgrow="ALWAYS"/>
+        <HBox spacing="8">
+            <Label text="Jig Search"     styleClass="login-feature-tag"/>
+            <Label text="Drawing Files"  styleClass="login-feature-tag"/>
+            <Label text="Status Logs"    styleClass="login-feature-tag"/>
+            <Label text="Role Control"   styleClass="login-feature-tag"/>
+        </HBox>
+    </VBox>
+
+    <!-- Right panel: login form -->
+    <VBox styleClass="login-right" minWidth="380" maxWidth="380" spacing="0">
+        <padding>
+            <Insets top="44" right="40" bottom="40" left="40"/>
+        </padding>
+
+        <Label text="Jig &amp; Toolings Management Login" styleClass="login-card-title" wrapText="true"/>
+        <Label text="治具及模具管理系統登入" styleClass="login-card-title-zh"/>
+
+        <Region prefHeight="24"/>
+
+        <Label text="Username" styleClass="field-label"/>
+        <Label text="帳號" styleClass="field-label-zh"/>
+        <Region prefHeight="4"/>
+        <TextField fx:id="usernameField" promptText="Enter username"
+                   styleClass="login-input" onAction="#focusPassword"/>
+
+        <Region prefHeight="14"/>
+
+        <Label text="Password" styleClass="field-label"/>
+        <Label text="密碼" styleClass="field-label-zh"/>
+        <Region prefHeight="4"/>
+        <StackPane>
+            <PasswordField fx:id="passwordField" promptText="Enter password"
+                           styleClass="login-input password-input" onAction="#handleLogin"/>
+            <TextField fx:id="passwordVisibleField" promptText="Enter password"
+                       styleClass="login-input password-input" visible="false" managed="false"
+                       onAction="#handleLogin"/>
+            <Button fx:id="togglePasswordBtn" text="&#x1F441;"
+                    styleClass="eye-toggle-btn"
+                    onAction="#togglePasswordVisibility"
+                    StackPane.alignment="CENTER_RIGHT"/>
+        </StackPane>
+
+        <Label fx:id="errorLabel" styleClass="error-label" visible="false" managed="false"/>
+
+        <Region prefHeight="18"/>
+
+        <Button fx:id="loginButton" text="Login" styleClass="login-btn"
+                onAction="#handleLogin" defaultButton="true" maxWidth="Infinity"/>
+
+        <Region prefHeight="18"/>
+
+        <Label text="Forgot your password or need an account? Please contact the admin to reset your password or create a new account."
+               styleClass="login-footer-en" wrapText="true"/>
+        <Region prefHeight="4"/>
+        <Label text="忘記密碼或需要帳號？請聯絡 Admin 管理者重設密碼或申請新帳號。"
+               styleClass="login-footer-zh" wrapText="true"/>
+    </VBox>
+
+</HBox>

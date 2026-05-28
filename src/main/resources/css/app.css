@@ -1,0 +1,173 @@
+/* ===== Login Screen ===== */
+
+.login-root {
+    -fx-background-color: #111827;
+    -fx-pref-height: 600px;
+}
+
+/* --- Left branding panel --- */
+
+.login-left {
+    -fx-background-color: #111827;
+}
+
+.login-left-tag {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+    -fx-letter-spacing: 1;
+}
+
+.login-left-title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f9fafb;
+    -fx-line-spacing: 2;
+}
+
+.login-left-title-zh {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #9ca3af;
+}
+
+.login-left-desc {
+    -fx-font-size: 13px;
+    -fx-text-fill: #d1d5db;
+    -fx-line-spacing: 2;
+}
+
+.login-left-desc-zh {
+    -fx-font-size: 12px;
+    -fx-text-fill: #9ca3af;
+}
+
+.login-feature-tag {
+    -fx-text-fill: #e5e7eb;
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 5 12 5 12;
+    -fx-font-size: 12px;
+}
+
+/* --- Right login form panel --- */
+
+.login-right {
+    -fx-background-color: #ffffff;
+}
+
+.login-card-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.login-card-title-zh {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6b7280;
+}
+
+.field-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.field-label-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9ca3af;
+}
+
+.login-input {
+    -fx-pref-height: 40px;
+    -fx-font-size: 14px;
+    -fx-background-color: #f9fafb;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 0 12 0 12;
+}
+
+.login-input:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+}
+
+.password-input {
+    -fx-padding: 0 40 0 12;
+}
+
+.eye-toggle-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-font-size: 15px;
+    -fx-padding: 4 10 4 10;
+    -fx-min-width: 36px;
+}
+
+.eye-toggle-btn:hover {
+    -fx-background-color: rgba(0,0,0,0.06);
+    -fx-background-radius: 4;
+}
+
+.error-label {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.login-btn {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 44px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.login-btn:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.login-btn:pressed {
+    -fx-background-color: #1e40af;
+}
+
+.login-btn:disabled {
+    -fx-background-color: #93c5fd;
+}
+
+.login-footer-en {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9ca3af;
+    -fx-line-spacing: 2;
+}
+
+.login-footer-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9ca3af;
+}
+
+/* ===== Main Window ===== */
+
+.main-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.welcome-label {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.placeholder-hint {
+    -fx-font-size: 15px;
+    -fx-text-fill: #6b7280;
+}

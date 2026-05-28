@@ -155,6 +155,356 @@
     -fx-text-fill: #9ca3af;
 }
 
+/* ===== Main Window Topbar ===== */
+
+.main-topbar {
+    -fx-background-color: #ffffff;
+}
+
+.topbar-welcome {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.topbar-admin-btn {
+    -fx-background-color: #f8fafc;
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+    -fx-pref-height: 32px;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.topbar-admin-btn:hover {
+    -fx-background-color: #f1f5f9;
+}
+
+/* ===== Uninstall Dialog ===== */
+
+.dialog-root {
+    -fx-background-color: #ffffff;
+}
+
+.dialog-warn-header {
+    -fx-background-color: #dc2626;
+}
+
+.dialog-warn-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff;
+}
+
+.dialog-warn-title-zh {
+    -fx-font-size: 13px;
+    -fx-text-fill: #fecaca;
+}
+
+.dialog-body-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.dialog-body-label-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+.dialog-bullet {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+}
+
+.dialog-warn-text {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.dialog-auth-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.dialog-auth-label-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+.dialog-cancel-btn {
+    -fx-background-color: #f3f4f6;
+    -fx-text-fill: #374151;
+    -fx-font-size: 13px;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.dialog-cancel-btn:hover {
+    -fx-background-color: #e5e7eb;
+}
+
+.dialog-uninstall-btn {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 36px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.dialog-uninstall-btn:hover {
+    -fx-background-color: #b91c1c;
+}
+
+/* ===== Admin Management Window ===== */
+
+.admin-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.admin-header {
+    -fx-background-color: #1e293b;
+}
+
+.admin-header-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f1f5f9;
+}
+
+.admin-header-title-zh {
+    -fx-font-size: 13px;
+    -fx-text-fill: #94a3b8;
+}
+
+.admin-scroll {
+    -fx-background-color: #f3f4f6;
+    -fx-background: #f3f4f6;
+}
+
+.admin-card {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 8, 0, 0, 2);
+}
+
+.admin-card-danger {
+    -fx-border-color: #fecaca;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+}
+
+.admin-card-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.admin-card-title-danger {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.admin-field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.admin-field-label-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+.admin-field-label-sm {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6b7280;
+}
+
+.admin-value-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+    -fx-font-family: monospace;
+}
+
+.admin-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+    -fx-font-style: italic;
+}
+
+.admin-hint-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #9ca3af;
+}
+
+.admin-warn-text {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.admin-warn-text-zh {
+    -fx-font-size: 11px;
+    -fx-text-fill: #ef4444;
+}
+
+.admin-field {
+    -fx-pref-height: 34px;
+    -fx-font-size: 12px;
+    -fx-background-color: #f9fafb;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 0 10 0 10;
+}
+
+.admin-checkbox {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+}
+
+.admin-list {
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-font-size: 12px;
+}
+
+.admin-btn-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.admin-btn-primary:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.admin-btn-outline {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.admin-btn-outline:hover {
+    -fx-background-color: #f9fafb;
+}
+
+.admin-btn-warning {
+    -fx-background-color: #f59e0b;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.admin-btn-warning:hover {
+    -fx-background-color: #d97706;
+}
+
+.admin-btn-warning:disabled {
+    -fx-background-color: #fde68a;
+    -fx-text-fill: #92400e;
+}
+
+.admin-btn-danger {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.admin-btn-danger:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.admin-tabpane {
+    -fx-background-color: #f3f4f6;
+}
+
+.admin-tabpane .tab-header-area .tab-header-background {
+    -fx-background-color: #1e293b;
+}
+
+.admin-tabpane .tab {
+    -fx-background-color: #1e293b;
+    -fx-padding: 6 16 6 16;
+}
+
+.admin-tabpane .tab .tab-label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 12px;
+}
+
+.admin-tabpane .tab:selected {
+    -fx-background-color: #f3f4f6;
+}
+
+.admin-tabpane .tab:selected .tab-label {
+    -fx-text-fill: #1e293b;
+    -fx-font-weight: bold;
+}
+
+.admin-table-toolbar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.admin-section-bar {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 1 0;
+}
+
+.admin-section-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.admin-table {
+    -fx-font-size: 12px;
+}
+
+.admin-update-detail {
+    -fx-background-color: #f0fdf4;
+    -fx-background-radius: 6;
+    -fx-border-color: #86efac;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+}
+
 /* ===== Main Window ===== */
 
 .main-root {

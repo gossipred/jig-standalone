@@ -1,7 +1,10 @@
 package com.jj.jig;
 
+import com.jj.jig.backup.AutoBackupService;
+import com.jj.jig.backup.BackupRestoreService;
 import com.jj.jig.ui.SpringFxmlLoader;
 import com.jj.jig.ui.StageHolder;
+import com.jj.jig.uninstall.UninstallService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;
@@ -15,7 +18,12 @@ public class JigFxApp extends Application {
     private ConfigurableApplicationContext springContext;
 
     @Override
-    public void init() {
+    public void init() throws Exception {
+        // Restore from backup BEFORE Spring starts (H2 not yet connected)
+        if (BackupRestoreService.hasPendingRestore()) {
+            BackupRestoreService.executePendingRestore();
+        }
+
         springContext = new SpringApplicationBuilder(JigSpringApplication.class)
                 .run(getParameters().getRaw().toArray(new String[0]));
     }
@@ -23,6 +31,10 @@ public class JigFxApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         springContext.getBean(StageHolder.class).setPrimaryStage(stage);
+
+        // Run auto-backup check in background after Spring is ready
+        new Thread(() ->
+                springContext.getBean(AutoBackupService.class).checkAndRunAutoBackup()).start();
 
         Parent loginRoot = springContext.getBean(SpringFxmlLoader.class).load("/fxml/login.fxml");
 
@@ -38,7 +50,17 @@ public class JigFxApp extends Application {
 
     @Override
     public void stop() {
-        springContext.close();
+        UninstallService uninstallService = springContext.getBean(UninstallService.class);
+        boolean doUninstall = uninstallService.isPendingUninstall();
+
+        springContext.close();  // H2 releases the DB lock here
+
+        if (doUninstall) {
+            try {
+                uninstallService.deleteDataDirectory();
+            } catch (Exception ignored) {}
+        }
+
         Platform.exit();
     }
 }

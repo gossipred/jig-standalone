@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.uninstall.UninstallDialogController"
+      styleClass="dialog-root" prefWidth="460" spacing="0">
+
+    <!-- Warning header -->
+    <VBox styleClass="dialog-warn-header" spacing="4">
+        <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+        <Label text="&#x26A0;  Uninstall Application" styleClass="dialog-warn-title"/>
+        <Label text="    卸載應用程式" styleClass="dialog-warn-title-zh"/>
+    </VBox>
+
+    <!-- What will be deleted -->
+    <VBox styleClass="dialog-body" spacing="6">
+        <padding><Insets top="20" right="28" bottom="16" left="28"/></padding>
+        <Label text="This will permanently delete ALL data:" styleClass="dialog-body-label"/>
+        <Label text="此操作將永久刪除以下所有資料：" styleClass="dialog-body-label-zh"/>
+        <Region prefHeight="6"/>
+        <Label text="  •  All jig &amp; tooling records  /  所有治具與模具紀錄" styleClass="dialog-bullet"/>
+        <Label text="  •  All uploaded files &amp; drawings  /  所有上傳的附件與圖紙" styleClass="dialog-bullet"/>
+        <Label text="  •  Database and configuration files  /  資料庫與設定檔案" styleClass="dialog-bullet"/>
+        <Region prefHeight="10"/>
+        <Label text="&#x26A0;  This action CANNOT be undone.  此操作無法復原。"
+               styleClass="dialog-warn-text"/>
+    </VBox>
+
+    <Separator/>
+
+    <!-- Re-authentication section -->
+    <VBox styleClass="dialog-auth" spacing="0">
+        <padding><Insets top="16" right="28" bottom="20" left="28"/></padding>
+        <Label text="Re-enter admin credentials to confirm:" styleClass="dialog-auth-label"/>
+        <Label text="請重新輸入管理者帳號密碼以確認：" styleClass="dialog-auth-label-zh"/>
+        <Region prefHeight="12"/>
+
+        <Label text="Username" styleClass="field-label"/>
+        <Label text="帳號" styleClass="field-label-zh"/>
+        <Region prefHeight="4"/>
+        <TextField fx:id="usernameField" promptText="Admin username"
+                   styleClass="login-input"/>
+
+        <Region prefHeight="10"/>
+
+        <Label text="Password" styleClass="field-label"/>
+        <Label text="密碼" styleClass="field-label-zh"/>
+        <Region prefHeight="4"/>
+        <StackPane>
+            <PasswordField fx:id="passwordField" promptText="Admin password"
+                           styleClass="login-input password-input"/>
+            <TextField fx:id="passwordVisibleField" promptText="Admin password"
+                       styleClass="login-input password-input" visible="false" managed="false"/>
+            <Button fx:id="togglePasswordBtn" text="&#x1F441;"
+                    styleClass="eye-toggle-btn"
+                    onAction="#togglePasswordVisibility"
+                    StackPane.alignment="CENTER_RIGHT"/>
+        </StackPane>
+
+        <Label fx:id="errorLabel" styleClass="error-label" visible="false" managed="false"/>
+    </VBox>
+
+    <!-- Buttons -->
+    <HBox styleClass="dialog-footer" spacing="10" alignment="CENTER_RIGHT">
+        <padding><Insets top="14" right="28" bottom="18" left="28"/></padding>
+        <Button text="Cancel  /  取消" styleClass="dialog-cancel-btn"
+                onAction="#handleCancel"/>
+        <Button text="&#x1F5D1;  Confirm Uninstall  /  確認卸載"
+                styleClass="dialog-uninstall-btn"
+                onAction="#handleConfirm"/>
+    </HBox>
+
+</VBox>

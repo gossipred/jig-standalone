@@ -126,6 +126,24 @@ public class UserService {
         );
     }
 
+    @Transactional
+    public void delete(Long id, String actorUsername) {
+        User user = findById(id);
+        // Guard: cannot delete the last active admin
+        if (user.getRole() == UserRole.ADMIN) {
+            long adminCount = userRepository.findAll().stream()
+                    .filter(u -> u.getRole() == UserRole.ADMIN && u.isEnabled())
+                    .count();
+            if (adminCount <= 1) {
+                throw new IllegalStateException(
+                        "Cannot delete the only active admin account.");
+            }
+        }
+        saveLog(user, findActor(actorUsername), UserLogActionType.DELETE,
+                user.getRole().name(), null, "Account deleted by admin.");
+        userRepository.delete(user);
+    }
+
     private String normalizeUsername(String username) {
         return username == null ? "" : username.trim();
     }

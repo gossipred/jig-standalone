@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.jj.jig.ui.main.MainController"
+            styleClass="main-root">
+
+    <top>
+        <VBox>
+            <HBox styleClass="main-topbar" alignment="CENTER_LEFT" spacing="12">
+                <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+                <Label fx:id="welcomeLabel" styleClass="topbar-welcome"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="adminBtn" text="&#x2699;  Admin Management / 管理員設定"
+                        styleClass="topbar-admin-btn"
+                        onAction="#handleOpenAdminManagement"
+                        visible="false" managed="false"/>
+            </HBox>
+            <Separator/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="16">
+            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+            <Label text="Main window — Phase 3 in progress" styleClass="placeholder-hint"/>
+        </VBox>
+    </center>
+
+</BorderPane>

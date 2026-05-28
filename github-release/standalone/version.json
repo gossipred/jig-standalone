@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "releaseDate": "2026-05-28",
+  "downloadUrl": "https://github.com/gossipred/jig-and-toolings-management-system/releases/tag/standalone-v1.0.0",
+  "releaseNotes": "Initial release: login screen, password toggle, admin management, backup/restore/uninstall.",
+  "releaseNotesZh": "初始版本：登入畫面、密碼顯示切換、管理員設定、備份/還原/卸載功能。"
+}

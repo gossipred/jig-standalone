@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.admin.AdminManagementController"
+      styleClass="admin-root" prefWidth="780" prefHeight="660" spacing="0">
+
+    <!-- Header -->
+    <HBox styleClass="admin-header" alignment="CENTER_LEFT" spacing="12">
+        <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+        <Label text="&#x2699;  Admin Management" styleClass="admin-header-title"/>
+        <Label text="/  管理員操作設定" styleClass="admin-header-title-zh"/>
+    </HBox>
+    <Separator/>
+
+    <!-- TabPane -->
+    <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" styleClass="admin-tabpane">
+
+        <!-- ====== Tab 1: Users ====== -->
+        <Tab text="&#x1F465;  Users / 帳號管理">
+            <VBox spacing="0">
+
+                <!-- Toolbar -->
+                <HBox styleClass="admin-table-toolbar" alignment="CENTER_LEFT" spacing="8">
+                    <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+                    <Button text="+ Add User / 新增帳號"
+                            styleClass="admin-btn-primary" onAction="#handleAddUser"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="editUserBtn" text="Edit / 編輯"
+                            styleClass="admin-btn-outline" onAction="#handleEditUser" disable="true"/>
+                    <Button fx:id="resetPasswordBtn" text="Reset Password / 重設密碼"
+                            styleClass="admin-btn-outline" onAction="#handleResetPassword" disable="true"/>
+                    <Button fx:id="deleteUserBtn" text="Delete / 刪除"
+                            styleClass="admin-btn-danger" onAction="#handleDeleteUser" disable="true"/>
+                </HBox>
+
+                <!-- User table -->
+                <TableView fx:id="usersTable" VBox.vgrow="ALWAYS" styleClass="admin-table">
+                    <columns>
+                        <TableColumn fx:id="colUsername" text="Username / 帳號" prefWidth="170"/>
+                        <TableColumn fx:id="colRole"     text="Role / 角色"     prefWidth="130"/>
+                        <TableColumn fx:id="colStatus"   text="Status / 狀態"   prefWidth="100"/>
+                        <TableColumn fx:id="colCreated"  text="Created / 建立日期" prefWidth="150"/>
+                    </columns>
+                    <placeholder><Label text="No users / 無帳號資料"/></placeholder>
+                </TableView>
+
+                <!-- Recent activity log -->
+                <HBox styleClass="admin-section-bar" alignment="CENTER_LEFT">
+                    <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+                    <Label text="Recent Activity / 最近操作紀錄" styleClass="admin-section-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Refresh / 重新整理" styleClass="admin-btn-outline"
+                            onAction="#handleRefresh"/>
+                </HBox>
+                <TableView fx:id="logsTable" prefHeight="150" styleClass="admin-table">
+                    <columns>
+                        <TableColumn fx:id="colLogActor"  text="Operator / 操作者"  prefWidth="130"/>
+                        <TableColumn fx:id="colLogTarget" text="Target / 目標帳號"  prefWidth="130"/>
+                        <TableColumn fx:id="colLogAction" text="Action / 動作"      prefWidth="160"/>
+                        <TableColumn fx:id="colLogDate"   text="Date / 日期時間"    prefWidth="180"/>
+                    </columns>
+                    <placeholder><Label text="No activity / 無操作紀錄"/></placeholder>
+                </TableView>
+
+            </VBox>
+        </Tab>
+
+        <!-- ====== Tab 2: Update ====== -->
+        <Tab text="&#x1F504;  Update / 軟體更新">
+            <ScrollPane fitToWidth="true" styleClass="admin-scroll">
+                <VBox spacing="0">
+                    <padding><Insets top="20" right="24" bottom="24" left="24"/></padding>
+                    <VBox styleClass="admin-card" spacing="10">
+                        <padding><Insets top="18" right="20" bottom="18" left="20"/></padding>
+                        <Label text="Software Update / 軟體更新" styleClass="admin-card-title"/>
+                        <Separator/>
+                        <HBox spacing="16" alignment="CENTER_LEFT">
+                            <Label text="Current Version / 目前版本：" styleClass="admin-field-label-sm"/>
+                            <Label fx:id="currentVersionLabel" styleClass="admin-value-label"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button text="&#x1F504;  Check for Update / 檢查更新"
+                                    styleClass="admin-btn-primary" onAction="#handleCheckUpdate"/>
+                            <Label fx:id="updateStatusLabel" styleClass="admin-field-label-sm"/>
+                        </HBox>
+                        <VBox fx:id="updateDetailsBox" styleClass="admin-update-detail" spacing="6">
+                            <padding><Insets top="10" right="14" bottom="10" left="14"/></padding>
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label text="New Version / 新版本：" styleClass="admin-field-label-sm"/>
+                                <Label fx:id="updateVersionLabel" styleClass="admin-value-label"/>
+                            </HBox>
+                            <Label fx:id="updateNotesLabel" styleClass="admin-field-label"/>
+                            <Label fx:id="updateNotesZhLabel" styleClass="admin-field-label-zh"/>
+                            <Region prefHeight="4"/>
+                            <Button fx:id="openDownloadBtn"
+                                    text="&#x1F4E5;  Open Download Page / 開啟下載頁面"
+                                    styleClass="admin-btn-primary" onAction="#handleOpenDownload"/>
+                        </VBox>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- ====== Tab 3: Backup & Restore ====== -->
+        <Tab text="&#x1F4BE;  Backup &amp; Restore / 備份與還原">
+            <ScrollPane fitToWidth="true" styleClass="admin-scroll">
+                <VBox spacing="16">
+                    <padding><Insets top="20" right="24" bottom="24" left="24"/></padding>
+
+                    <!-- Backup Card -->
+                    <VBox styleClass="admin-card" spacing="10">
+                        <padding><Insets top="18" right="20" bottom="18" left="20"/></padding>
+                        <Label text="&#x1F4BE;  Backup / 備份" styleClass="admin-card-title"/>
+                        <Separator/>
+                        <Label text="Backup Destination / 備份目的地" styleClass="admin-field-label"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <TextField fx:id="backupLocationField" HBox.hgrow="ALWAYS"
+                                       promptText="Select folder / 選擇資料夾"
+                                       styleClass="admin-field" editable="false"/>
+                            <Button text="Browse / 瀏覽" styleClass="admin-btn-outline"
+                                    onAction="#handleBrowseBackupLocation"/>
+                        </HBox>
+                        <HBox spacing="10">
+                            <Button text="&#x1F4BE;  Backup Now / 立即備份"
+                                    styleClass="admin-btn-primary" onAction="#handleBackupNow"/>
+                        </HBox>
+                        <Separator/>
+                        <Label text="Auto-Backup Settings / 自動備份設定" styleClass="admin-field-label"/>
+                        <HBox spacing="16" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="autoBackupCheckBox"
+                                      text="Enable auto-backup / 啟用自動備份"
+                                      styleClass="admin-checkbox"/>
+                        </HBox>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="Frequency / 頻率：" styleClass="admin-field-label-sm"/>
+                            <ComboBox fx:id="frequencyComboBox" prefWidth="140"/>
+                        </HBox>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="Last auto-backup / 上次自動備份：" styleClass="admin-field-label-sm"/>
+                            <Label fx:id="lastAutoBackupLabel" styleClass="admin-value-label"/>
+                        </HBox>
+                        <Button text="Save Settings / 儲存設定" styleClass="admin-btn-outline"
+                                onAction="#handleSaveAutoBackupSettings"/>
+                    </VBox>
+
+                    <!-- Restore Card -->
+                    <VBox styleClass="admin-card" spacing="10">
+                        <padding><Insets top="18" right="20" bottom="18" left="20"/></padding>
+                        <Label text="&#x1F4E5;  Restore / 還原" styleClass="admin-card-title"/>
+                        <Separator/>
+                        <Label text="Current Data Location / 現有資料位置" styleClass="admin-field-label"/>
+                        <Label fx:id="dataStatusLabel" styleClass="admin-value-label" wrapText="true"/>
+                        <Region prefHeight="4"/>
+                        <Label text="Backup Folder / 備份資料夾（選擇存放備份的上層目錄）"
+                               styleClass="admin-field-label"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <TextField fx:id="restoreFolderField" HBox.hgrow="ALWAYS"
+                                       promptText="Select folder containing backups / 選擇包含備份的資料夾"
+                                       styleClass="admin-field" editable="false"/>
+                            <Button text="Browse / 瀏覽" styleClass="admin-btn-outline"
+                                    onAction="#handleBrowseRestoreFolder"/>
+                        </HBox>
+                        <Label text="Available Backups / 可用備份（選擇要還原的版本）"
+                               styleClass="admin-field-label"/>
+                        <ListView fx:id="backupListView" prefHeight="120" styleClass="admin-list"/>
+                        <Label text="The app will exit and restore data on next launch."
+                               styleClass="admin-hint"/>
+                        <Label text="程式將結束，下次啟動時自動還原資料。"
+                               styleClass="admin-hint-zh"/>
+                        <Button fx:id="scheduleRestoreBtn"
+                                text="&#x1F4E5;  Schedule Restore / 排程還原"
+                                styleClass="admin-btn-warning" onAction="#handleScheduleRestore"
+                                disable="true"/>
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </Tab>
+
+        <!-- ====== Tab 4: Uninstall ====== -->
+        <Tab text="&#x1F5D1;  Uninstall / 卸載">
+            <VBox alignment="TOP_LEFT" spacing="16">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <VBox styleClass="admin-card admin-card-danger" spacing="10">
+                    <padding><Insets top="18" right="20" bottom="18" left="20"/></padding>
+                    <Label text="&#x1F5D1;  Uninstall Application / 卸載應用程式"
+                           styleClass="admin-card-title-danger"/>
+                    <Separator/>
+                    <Label text="Remove all app data, database, and uploaded files."
+                           styleClass="admin-field-label"/>
+                    <Label text="刪除所有應用程式資料、資料庫與上傳的附件。"
+                           styleClass="admin-field-label-zh"/>
+                    <Label text="This action CANNOT be undone. Create a backup first."
+                           styleClass="admin-warn-text"/>
+                    <Label text="此操作無法復原，建議先備份。"
+                           styleClass="admin-warn-text-zh"/>
+                    <Region prefHeight="4"/>
+                    <Button text="&#x1F5D1;  Uninstall Application / 卸載應用程式"
+                            styleClass="admin-btn-danger" onAction="#handleOpenUninstallDialog"/>
+                </VBox>
+            </VBox>
+        </Tab>
+
+    </TabPane>
+</VBox>

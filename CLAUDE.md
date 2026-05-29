@@ -165,6 +165,37 @@ app 已在執行時，`mvn javafx:run` 啟動第二個實例會因 H2 file lock 
 
 ---
 
+## License 管理系統
+
+### 授權類型
+| type | 說明 |
+|------|------|
+| TRIAL | 系統自動，首次啟動建立 trial.dat，30 天 |
+| SUBSCRIPTION | 訂閱制，綁機器 ID，有到期日 |
+| PERPETUAL | 買斷，綁機器 ID，無到期日 |
+| MASTER | 萬用，無機器限制、無時間限制，JJ 獨有 |
+
+### 啟動驗證順序
+1. `~/.jig-standalone/license.lic` 存在且 RSA 簽名正確 → 按 type 判斷
+2. 無 .lic 或驗證失敗 → 讀 `trial.dat`
+3. trial.dat 不存在 → 首次啟動，建立 30 天試用
+4. 試用到期 → 顯示 `license-screen.fxml`（鎖定登入）
+
+### 私鑰位置（不進 GitHub）
+```
+~/.jig-license/private_key.pem
+~/.jig-license/private_key_b64.txt   ← LicenseTool 使用
+```
+
+### 產 License 指令（JJ 專用）
+```bash
+cd /Users/chienchungwu/Documents/jig-standalone
+javac tools/LicenseTool.java -d tools/    # 只需第一次
+java -cp tools LicenseTool                # 互動式產生 .lic
+```
+
+---
+
 ## 預設帳號
 
 | 帳號 | 密碼 | 角色 |

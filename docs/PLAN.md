@@ -76,22 +76,23 @@ UI 層          JavaFX 21 (FXML + CSS)
 - [x] 匯入 CSV（預覽對話框、New/Update/Error badge、下載範本）
 - [x] 匯出 CSV（全部或選取，FileChooser 存檔）
 
-### 🔄 Phase 4 — 報表與日誌（進行中）
+### ✅ Phase 4 — 報表與日誌（完成）
 
-- [x] Nav Bar — JTs / Logs / Stats 三頁切換（main.fxml + MainController 動態 load）
+- [x] Nav Bar — JTs / Logs / Stats 三頁切換
 - [x] 跨 JT 異動紀錄查詢（日期範圍、操作者、動作類型，預設最近 7 天）
 - [x] Log 頁 Export CSV
 - [x] 狀態統計圖表（JavaFX PieChart + 各狀態件數/百分比卡片）
 - [x] 備份資料夾加入 HHmm 時間戳記
-- [x] UpdateService URL 修正（新 repo：gossipred/jig-standalone）
-- [x] PDF 報表匯出（JigPdfReportService，OpenPDF 2.0.3，Stats A4 直式 + Logs A4 橫式，CJK 字型自動偵測）
-- [ ] 列印報表
+- [x] UpdateService URL 修正
+- [x] 列印報表（自建 PrinterChooser，取代 PDF 匯出）
+- [x] Admin Update 分頁 SOP（雙語 6 步驟）
+- [x] License 管理系統（TRIAL/SUBSCRIPTION/PERPETUAL/MASTER，RSA 簽名）
 
-### 📦 Phase 5 — 打包與發布
+### ✅ Phase 5 — 打包與發布（完成）
 
-- [ ] macOS `.dmg` / `.pkg`（jpackage）
-- [ ] Windows `.msi` / `.exe`（jpackage + WiX）
-- [ ] 自動化 build pipeline
+- [x] macOS `.dmg`（jpackage + jlink custom JRE + JavaFX 21 jmods）
+- [x] Windows `.msi`（GitHub Actions CI，windows-latest runner）
+- [x] GitHub Actions workflow（`build-windows-msi.yml`，手動 + tag 觸發）
 
 ---
 

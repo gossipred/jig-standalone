@@ -86,7 +86,7 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 
 ---
 
-## Phase 4 — 報表與日誌 🔄 進行中
+## Phase 4 — 報表與日誌 ✅ 完成
 
 | 項目 | 狀態 | 完成日期 |
 |------|------|----------|
@@ -97,8 +97,28 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 | 狀態統計圖表（PieChart + 各狀態件數/百分比） | ✅ | 2026-05-29 |
 | 備份資料夾加入時間戳記 | ✅ | 2026-05-29 |
 | UpdateService URL 修正至新 repo | ✅ | 2026-05-29 |
-| PDF 報表匯出 | 🔄 | 規劃中 |
-| 列印報表 | 📋 | — |
+| 列印報表（取代 PDF，自建 PrinterChooser） | ✅ | 2026-05-29 |
+| Admin Update 分頁 SOP（雙語 6 步驟） | ✅ | 2026-05-29 |
+| License 管理系統（TRIAL/SUBSCRIPTION/PERPETUAL/MASTER） | ✅ | 2026-05-29 |
+
+---
+
+## Phase 5 — 打包與發布 ✅ macOS 完成 / Windows CI 完成
+
+| 項目 | 狀態 | 完成日期 |
+|------|------|----------|
+| macOS .dmg（jpackage + custom JRE） | ✅ | 2026-05-29 |
+| Windows .msi（GitHub Actions CI） | ✅ | 2026-05-29 |
+| GitHub Actions workflow（build-windows-msi.yml） | ✅ | 2026-05-29 |
+
+**macOS 打包關鍵設定：**
+- custom JRE：`jlink` + JavaFX 21 jmods（`~/javafx-jmods/custom-jre-v2/`）
+- main class：`org.springframework.boot.loader.launch.JarLauncher`
+- 需要模組：`java.instrument`（Hibernate 需要）
+
+**Windows CI 觸發方式：**
+- 手動：GitHub Actions → Build Windows MSI → Run workflow
+- 自動：push tag `v*`
 
 ---
 
@@ -112,6 +132,5 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 
 ## 下一步行動
 
-1. 開始 Phase 4：跨 Jig 日誌查詢頁面
-2. 在 GitHub repo 建立 `standalone/version.json`
-3. 建立第一個 GitHub Release `standalone-v1.0.0`
+1. 建立 GitHub Release `v1.1.0`，附上 macOS .dmg 和 Windows .msi
+2. 更新 version.json（配合 UpdateService 版本檢查）

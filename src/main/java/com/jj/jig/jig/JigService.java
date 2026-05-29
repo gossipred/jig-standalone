@@ -5,15 +5,23 @@ import com.jj.jig.log.JigLogActionType;
 import com.jj.jig.log.JigLogRepository;
 import com.jj.jig.user.User;
 import com.jj.jig.user.UserRepository;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -164,6 +172,16 @@ public class JigService {
             throw new IllegalArgumentException("Please choose a replacement file.");
         }
 
+        long oldSize = jigFile.getFileSize() != null ? jigFile.getFileSize() : 0L;
+        long existingTotal = jigFileRepository.sumFileSizeByJigId(jigFile.getJig().getId());
+        long sizeAfterReplace = existingTotal - oldSize + replacementFile.getSize();
+        if (sizeAfterReplace > MAX_TOTAL_FILE_SIZE_BYTES) {
+            throw new IllegalArgumentException(
+                    "Replacing this file would exceed the 100MB total limit for this jig. "
+                    + "Current total (excluding this file): " + formatFileSize(existingTotal - oldSize)
+                    + ", new file: " + formatFileSize(replacementFile.getSize()) + ".");
+        }
+
         String oldStoredPath = jigFile.getStoredPath();
         String oldFilename = jigFile.getOriginalFilename();
         JigFileStorageService.StoredJigFile storedFile = jigFileStorageService.store(replacementFile, jigFile.getJig().getJigNo());
@@ -184,8 +202,70 @@ public class JigService {
     }
 
     @Transactional
+    public void uploadFiles(Long jigId, List<Path> filePaths, String username) {
+        if (filePaths == null || filePaths.isEmpty()) {
+            return;
+        }
+        Jig jig = findById(jigId);
+
+        long existingCount = jigFileRepository.countByJigId(jigId);
+        if (existingCount + filePaths.size() > MAX_FILE_COUNT) {
+            throw new IllegalArgumentException(
+                    "A jig can have at most " + MAX_FILE_COUNT + " files "
+                    + "(currently " + existingCount + ", trying to add " + filePaths.size() + ").");
+        }
+
+        long newFilesSize = 0;
+        for (Path p : filePaths) {
+            try { newFilesSize += Files.size(p); } catch (IOException ignored) { }
+        }
+        long existingTotalSize = jigFileRepository.sumFileSizeByJigId(jigId);
+        if (existingTotalSize + newFilesSize > MAX_TOTAL_FILE_SIZE_BYTES) {
+            throw new IllegalArgumentException(
+                    "Total file size would exceed the 100MB limit for this jig "
+                    + "(current: " + formatFileSize(existingTotalSize)
+                    + ", adding: " + formatFileSize(newFilesSize) + ").");
+        }
+
+        int uploaded = 0;
+        for (Path filePath : filePaths) {
+            String originalFilename = filePath.getFileName().toString();
+            String contentType = null;
+            try { contentType = Files.probeContentType(filePath); } catch (IOException ignored) { }
+
+            JigFileStorageService.StoredJigFile storedFile =
+                    jigFileStorageService.store(filePath, originalFilename, contentType, jig.getJigNo());
+            if (storedFile == null) {
+                continue;
+            }
+            JigFile jigFile = new JigFile();
+            jigFile.setJig(jig);
+            jigFile.setOriginalFilename(storedFile.originalFilename());
+            jigFile.setStoredPath(storedFile.storedPath());
+            jigFile.setContentType(storedFile.contentType());
+            jigFile.setFileSize(storedFile.fileSize());
+            jigFileRepository.save(jigFile);
+            uploaded++;
+        }
+
+        if (uploaded > 0) {
+            saveSimpleLog(jig, findUser(username), JigLogActionType.FILE_UPLOAD,
+                    "Uploaded " + uploaded + " file(s).");
+        }
+    }
+
+    @Transactional
     public void deleteJig(Long id, String username) {
         Jig jig = findById(id);
+
+        List<JigFile> files = jigFileRepository.findByJigIdOrderByUploadedAtDesc(id);
+        for (JigFile f : files) {
+            jigFileStorageService.deleteIfExists(f.getStoredPath());
+        }
+        jigFileRepository.deleteAll(files);
+
+        jigLogRepository.deleteAll(jigLogRepository.findByJigIdOrderByCreatedAtDesc(id));
+
         jigRepository.delete(jig);
     }
 
@@ -193,21 +273,32 @@ public class JigService {
     public Jig updateStatus(Long id, JigStatus newStatus, String note, String username) {
         Jig jig = findById(id);
         JigStatus oldStatus = jig.getStatus();
-        if (oldStatus == newStatus) {
+        boolean statusChanged = (oldStatus != newStatus);
+        String trimmedNote = blankToNull(note);
+
+        if (!statusChanged && trimmedNote == null) {
             return jig;
         }
 
-        jig.setStatus(newStatus);
-        jig.setUpdatedBy(findUser(username));
-        Jig savedJig = jigRepository.save(jig);
+        User user = findUser(username);
+
+        if (statusChanged) {
+            jig.setStatus(newStatus);
+            jig.setUpdatedBy(user);
+        }
+        Jig savedJig = statusChanged ? jigRepository.save(jig) : jig;
 
         JigLog log = new JigLog();
         log.setJig(savedJig);
-        log.setUser(findUser(username));
-        log.setActionType(JigLogActionType.STATUS_CHANGE);
-        log.setOldStatus(oldStatus);
-        log.setNewStatus(newStatus);
-        log.setNote(blankToNull(note));
+        log.setUser(user);
+        if (statusChanged) {
+            log.setActionType(JigLogActionType.STATUS_CHANGE);
+            log.setOldStatus(oldStatus);
+            log.setNewStatus(newStatus);
+        } else {
+            log.setActionType(JigLogActionType.NOTE);
+        }
+        log.setNote(trimmedNote);
         jigLogRepository.save(log);
         return savedJig;
     }
@@ -254,6 +345,7 @@ public class JigService {
         jig.setPrNo(blankToNull(form.getPrNo()));
         jig.setStatus(form.getStatus());
         jig.setDri(blankToNull(form.getDri()));
+        jig.setNote(blankToNull(form.getNote()));
         jig.setStartDate(form.getStartDate());
         jig.setDueDate(form.getDueDate());
     }
@@ -339,6 +431,9 @@ public class JigService {
         jigLogRepository.save(log);
     }
 
+    private static final int MAX_FILE_COUNT = 11;
+    private static final long MAX_TOTAL_FILE_SIZE_BYTES = 100L * 1024 * 1024; // 100 MB
+
     private void storeUploadedFiles(Jig jig, JigForm form) {
         List<MultipartFile> files = nonEmptyFiles(form.getJigFiles());
         if (files.isEmpty()) {
@@ -346,8 +441,19 @@ public class JigService {
         }
 
         long existingFileCount = jigFileRepository.countByJigId(jig.getId());
-        if (existingFileCount + files.size() > 5) {
-            throw new IllegalArgumentException("A jig can have up to 5 files.");
+        if (existingFileCount + files.size() > MAX_FILE_COUNT) {
+            throw new IllegalArgumentException(
+                    "A jig can have at most " + MAX_FILE_COUNT + " files "
+                    + "(currently " + existingFileCount + ", trying to add " + files.size() + ").");
+        }
+
+        long existingTotalSize = jigFileRepository.sumFileSizeByJigId(jig.getId());
+        long newFilesSize = files.stream().mapToLong(MultipartFile::getSize).sum();
+        if (existingTotalSize + newFilesSize > MAX_TOTAL_FILE_SIZE_BYTES) {
+            throw new IllegalArgumentException(
+                    "Total file size would exceed the 100MB limit for this jig "
+                    + "(current: " + formatFileSize(existingTotalSize)
+                    + ", adding: " + formatFileSize(newFilesSize) + ").");
         }
 
         String firstStoredPath = null;
@@ -376,6 +482,40 @@ public class JigService {
         }
     }
 
+    // ===== Phase 4 — Log search & Stats =====
+
+    public List<JigLog> searchLogs(LocalDate from, LocalDate to,
+                                   JigLogActionType actionType, String username) {
+        LocalDateTime fromDt = from != null ? from.atStartOfDay() : null;
+        LocalDateTime toDt   = to   != null ? to.plusDays(1).atStartOfDay().minusNanos(1) : null;
+        String usernameParam = (username == null || username.isBlank()) ? null : username;
+        JigLogActionType typeParam = actionType;
+        return jigLogRepository.searchLogs(fromDt, toDt, typeParam, usernameParam);
+    }
+
+    public List<String> getAllUsernames() {
+        return userRepository.findAll().stream()
+                .map(User::getUsername)
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public Map<JigStatus, Long> getStatusStats() {
+        Map<JigStatus, Long> result = new EnumMap<>(JigStatus.class);
+        for (JigStatus s : JigStatus.values()) {
+            result.put(s, 0L);
+        }
+        jigRepository.findAll().forEach(j -> {
+            JigStatus s = j.getStatus() != null ? j.getStatus() : JigStatus.Normal;
+            result.merge(s, 1L, Long::sum);
+        });
+        return result;
+    }
+
+    public long getTotalJigCount() {
+        return jigRepository.count();
+    }
+
     private List<MultipartFile> nonEmptyFiles(List<MultipartFile> files) {
         if (files == null) {
             return List.of();
@@ -383,5 +523,15 @@ public class JigService {
         return files.stream()
                 .filter(file -> file != null && !file.isEmpty())
                 .toList();
+    }
+
+    private String formatFileSize(long bytes) {
+        if (bytes < 1024) {
+            return bytes + " B";
+        }
+        if (bytes < 1024 * 1024) {
+            return String.format("%.1f KB", bytes / 1024.0);
+        }
+        return String.format("%.1f MB", bytes / (1024.0 * 1024));
     }
 }

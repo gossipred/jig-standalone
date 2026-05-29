@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.stats.StatsViewController"
+      styleClass="jig-list-root">
+
+    <!-- Toolbar -->
+    <HBox styleClass="jig-toolbar" alignment="CENTER_LEFT" spacing="8">
+        <padding><Insets top="10" right="16" bottom="10" left="16"/></padding>
+        <Label text="Statistics / 統計" styleClass="jig-list-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="↺  Refresh / 重新整理" styleClass="jig-btn-outline" onAction="#handleRefresh"/>
+    </HBox>
+
+    <!-- Content -->
+    <HBox spacing="24" VBox.vgrow="ALWAYS">
+        <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+        <!-- Pie Chart -->
+        <PieChart fx:id="statusPieChart"
+                  title="Status Distribution / 狀態分布"
+                  animated="true"
+                  HBox.hgrow="ALWAYS"
+                  prefWidth="420" prefHeight="380"/>
+
+        <Separator orientation="VERTICAL"/>
+
+        <!-- Summary Cards -->
+        <VBox fx:id="summaryBox" spacing="12" prefWidth="260">
+            <padding><Insets top="10" left="8"/></padding>
+            <Label text="Summary / 摘要" styleClass="jig-stats-section-title"/>
+            <Label fx:id="totalLabel" styleClass="jig-stats-total-label" text="Total: —"/>
+            <Separator/>
+            <VBox fx:id="statsCardBox" spacing="8"/>
+        </VBox>
+
+    </HBox>
+
+</VBox>

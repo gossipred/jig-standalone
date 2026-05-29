@@ -183,6 +183,24 @@
     -fx-background-color: #f1f5f9;
 }
 
+.topbar-logout-btn {
+    -fx-background-color: #f9fafb;
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    -fx-pref-height: 32px;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.topbar-logout-btn:hover {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-border-color: #fca5a5;
+}
+
 /* ===== Uninstall Dialog ===== */
 
 .dialog-root {
@@ -520,4 +538,520 @@
 .placeholder-hint {
     -fx-font-size: 15px;
     -fx-text-fill: #6b7280;
+}
+
+/* ===== Jig List ===== */
+
+.jig-list-root {
+    -fx-background-color: #f3f4f6;
+}
+
+.jig-toolbar {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 0 0 1 0;
+}
+
+.jig-list-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.jig-search-field {
+    -fx-pref-height: 34px;
+    -fx-font-size: 13px;
+    -fx-background-color: #f9fafb;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 0 10 0 10;
+}
+
+.jig-search-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+}
+
+.jig-btn-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.jig-btn-primary:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+.jig-btn-primary:disabled {
+    -fx-background-color: #93c5fd;
+}
+
+.jig-btn-outline {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.jig-btn-outline:hover {
+    -fx-background-color: #f9fafb;
+}
+
+.jig-btn-outline:disabled {
+    -fx-text-fill: #9ca3af;
+    -fx-border-color: #e5e7eb;
+}
+
+.jig-btn-danger {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 34px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.jig-btn-danger:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.jig-btn-danger:disabled {
+    -fx-background-color: #fca5a5;
+    -fx-text-fill: #ffffff;
+}
+
+.jig-btn-outline-sm {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #374151;
+    -fx-font-size: 11px;
+    -fx-pref-height: 30px;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.jig-btn-outline-sm:hover {
+    -fx-background-color: #f9fafb;
+}
+
+.jig-file-row {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 4;
+    -fx-border-color: #e5e7eb;
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+    -fx-padding: 4 8 4 8;
+}
+
+.jig-table {
+    -fx-font-size: 12px;
+    -fx-background-color: #ffffff;
+}
+
+.jig-placeholder-label {
+    -fx-font-size: 13px;
+    -fx-text-fill: #9ca3af;
+}
+
+.jig-statusbar {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 0 0;
+}
+
+.jig-statusbar-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+/* --- Status Badges --- */
+
+.jig-status-badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8 3 8;
+    -fx-background-radius: 10;
+}
+
+.jig-status-onprocess {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+    -fx-border-color: #86efac;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-status-normal {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1d4ed8;
+    -fx-border-color: #93c5fd;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-status-scrap {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-border-color: #fca5a5;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-status-hold {
+    -fx-background-color: #fef3c7;
+    -fx-text-fill: #92400e;
+    -fx-border-color: #fcd34d;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-status-repair {
+    -fx-background-color: #ffedd5;
+    -fx-text-fill: #c2410c;
+    -fx-border-color: #fdba74;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-status-maintain {
+    -fx-background-color: #ede9fe;
+    -fx-text-fill: #6d28d9;
+    -fx-border-color: #c4b5fd;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+/* --- Due Date Coloring --- */
+
+.jig-duedate-overdue {
+    -fx-text-fill: #dc2626;
+    -fx-font-weight: bold;
+}
+
+.jig-duedate-warning {
+    -fx-text-fill: #d97706;
+    -fx-font-weight: bold;
+}
+
+.jig-duedate-empty {
+    -fx-text-fill: #9ca3af;
+}
+
+/* ===== Jig Form Dialog ===== */
+
+.jig-dialog-root {
+    -fx-background-color: #ffffff;
+}
+
+.jig-dialog-header {
+    -fx-background-color: #1e293b;
+}
+
+.jig-dialog-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f1f5f9;
+}
+
+.jig-dialog-title-zh {
+    -fx-font-size: 13px;
+    -fx-text-fill: #94a3b8;
+}
+
+.jig-form-scroll {
+    -fx-background-color: #ffffff;
+    -fx-background: #ffffff;
+}
+
+.jig-form-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.jig-form-hint {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6b7280;
+}
+
+.jig-form-field {
+    -fx-pref-height: 34px;
+    -fx-font-size: 13px;
+    -fx-background-color: #f9fafb;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 0 10 0 10;
+}
+
+.jig-form-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+}
+
+.jig-form-field-readonly {
+    -fx-background-color: #f3f4f6;
+    -fx-text-fill: #6b7280;
+    -fx-border-color: #e5e7eb;
+}
+
+.jig-form-error-bar {
+    -fx-background-color: #fef2f2;
+    -fx-border-color: #fca5a5;
+    -fx-border-width: 1 0 1 0;
+}
+
+.jig-form-error-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #dc2626;
+}
+
+.jig-form-textarea {
+    -fx-font-size: 13px;
+    -fx-background-color: #f9fafb;
+    -fx-background-radius: 6;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 6 10 6 10;
+}
+
+.jig-form-textarea:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2;
+}
+
+/* ===== Jig Detail ===== */
+
+.jig-detail-header {
+    -fx-background-color: #1e293b;
+}
+
+.jig-detail-jigno {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f1f5f9;
+    -fx-font-family: monospace;
+}
+
+.jig-detail-jigname {
+    -fx-font-size: 13px;
+    -fx-text-fill: #94a3b8;
+}
+
+.jig-btn-outline-light {
+    -fx-background-color: transparent;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 12px;
+    -fx-pref-height: 32px;
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(255,255,255,0.25);
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-cursor: hand;
+}
+
+.jig-btn-outline-light:hover {
+    -fx-background-color: rgba(255,255,255,0.1);
+}
+
+.jig-detail-field-label {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6b7280;
+}
+
+.jig-detail-field-value {
+    -fx-font-size: 13px;
+    -fx-text-fill: #111827;
+}
+
+.jig-detail-section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.jig-btn-danger-sm {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-pref-height: 26px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+
+.jig-btn-danger-sm:hover {
+    -fx-background-color: #b91c1c;
+}
+
+/* ===== Import Dialog ===== */
+
+.jig-import-summary-label {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.jig-import-checkbox {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+}
+
+.jig-import-badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8 3 8;
+    -fx-background-radius: 10;
+}
+
+.jig-import-new {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+    -fx-border-color: #86efac;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-import-update {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1d4ed8;
+    -fx-border-color: #93c5fd;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+.jig-import-error {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+    -fx-border-color: #fca5a5;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+}
+
+/* ===== Phase 4 — Nav Bar ===== */
+
+.main-navbar {
+    -fx-background-color: #f8fafc;
+}
+
+.main-nav-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 13px;
+    -fx-pref-height: 34px;
+    -fx-padding: 0 16 0 16;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 1;
+    -fx-border-radius: 6;
+}
+
+.main-nav-btn:hover {
+    -fx-background-color: #e5e7eb;
+    -fx-text-fill: #111827;
+}
+
+.main-nav-btn-active {
+    -fx-background-color: #1e3a5f;
+    -fx-text-fill: #ffffff;
+    -fx-font-weight: bold;
+}
+
+.main-nav-btn-active:hover {
+    -fx-background-color: #1e40af;
+}
+
+/* ===== Phase 4 — Log View ===== */
+
+.jig-log-statusbar {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1 0 0 0;
+    -fx-min-height: 28px;
+}
+
+.jig-log-action-badge {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 3 8 3 8;
+    -fx-background-radius: 10;
+}
+
+.jig-log-badge-create {
+    -fx-background-color: #dcfce7;
+    -fx-text-fill: #15803d;
+}
+
+.jig-log-badge-update {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #1d4ed8;
+}
+
+.jig-log-badge-delete {
+    -fx-background-color: #fee2e2;
+    -fx-text-fill: #dc2626;
+}
+
+.jig-log-badge-status {
+    -fx-background-color: #fef9c3;
+    -fx-text-fill: #854d0e;
+}
+
+.jig-log-badge-file {
+    -fx-background-color: #f3e8ff;
+    -fx-text-fill: #7e22ce;
+}
+
+/* ===== Phase 4 — Stats View ===== */
+
+.jig-stats-section-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #374151;
+}
+
+.jig-stats-total-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3a5f;
+}
+
+.jig-stats-row {
+    -fx-padding: 4 0 4 0;
+}
+
+.jig-stats-dot {
+    -fx-font-size: 14px;
+}
+
+.jig-stats-name {
+    -fx-font-size: 12px;
+    -fx-text-fill: #374151;
+}
+
+.jig-stats-count {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
 }

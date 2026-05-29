@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.jig.JigFormDialogController"
+      prefWidth="680"
+      styleClass="jig-dialog-root">
+
+    <!-- Header -->
+    <HBox styleClass="jig-dialog-header" alignment="CENTER_LEFT">
+        <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+        <VBox spacing="3">
+            <Label fx:id="dialogTitleLabel" text="New JT" styleClass="jig-dialog-title"/>
+            <Label fx:id="dialogTitleZhLabel" text="新增治模具" styleClass="jig-dialog-title-zh"/>
+        </VBox>
+    </HBox>
+
+    <!-- Form body -->
+    <ScrollPane fitToWidth="true" styleClass="jig-form-scroll" VBox.vgrow="ALWAYS">
+        <VBox spacing="14">
+            <padding><Insets top="20" right="24" bottom="20" left="24"/></padding>
+
+            <!-- Jig No. -->
+            <VBox spacing="4">
+                <Label text="JT No. *  治模具編號（必填）" styleClass="jig-form-label"/>
+                <TextField fx:id="jigNoField" promptText="e.g. AM-ME-001 or AM-ME-001-02"
+                           styleClass="jig-form-field" maxWidth="Infinity"/>
+                <HBox fx:id="jigNoAutoRow" spacing="8" alignment="CENTER_LEFT">
+                    <Label text="Prefix:" styleClass="jig-form-hint"/>
+                    <TextField fx:id="jigNoPrefixField" promptText="AM-ME"
+                               styleClass="jig-form-field" prefWidth="90"/>
+                    <Button text="Auto-generate / 自動產生" styleClass="jig-btn-outline-sm"
+                            onAction="#handleAutoGenerateJigNo"/>
+                </HBox>
+            </VBox>
+
+            <!-- Model Name + Jig Name -->
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Model Name *  型號（必填）" styleClass="jig-form-label"/>
+                    <TextField fx:id="modelNameField" promptText="e.g. iPro4 12P"
+                               styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="JT Name *  治模具名稱（必填）" styleClass="jig-form-label"/>
+                    <TextField fx:id="jigNameField" promptText="e.g. Main Frame Tray"
+                               styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Classification + Customer -->
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Classification / 分類" styleClass="jig-form-label"/>
+                    <TextField fx:id="classificationField" styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="Customer / 客戶" styleClass="jig-form-label"/>
+                    <TextField fx:id="customerField" styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Assembly Line + Quantity -->
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Assembly Line / 線別" styleClass="jig-form-label"/>
+                    <TextField fx:id="assemblyLineField" styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="Quantity / 數量" styleClass="jig-form-label"/>
+                    <Spinner fx:id="quantitySpinner" prefWidth="120" editable="true"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Status + DRI -->
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Status / 狀態" styleClass="jig-form-label"/>
+                    <ComboBox fx:id="statusCombo" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="DRI / 負責人" styleClass="jig-form-label"/>
+                    <TextField fx:id="driField" styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Start Date + Due Date -->
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="Start Date / 啟用日" styleClass="jig-form-label"/>
+                    <DatePicker fx:id="startDatePicker" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="Due Date / 到期日" styleClass="jig-form-label"/>
+                    <DatePicker fx:id="dueDatePicker" maxWidth="Infinity"/>
+                </VBox>
+            </GridPane>
+
+            <!-- MRO No + PR No -->
+            <GridPane hgap="16" vgap="4">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox spacing="4" GridPane.columnIndex="0">
+                    <Label text="MRO No. / MRO 編號" styleClass="jig-form-label"/>
+                    <TextField fx:id="mroNoField" styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4" GridPane.columnIndex="1">
+                    <Label text="PR No. / PR 編號" styleClass="jig-form-label"/>
+                    <TextField fx:id="prNoField" styleClass="jig-form-field" maxWidth="Infinity"/>
+                </VBox>
+            </GridPane>
+
+            <!-- Note -->
+            <VBox spacing="4">
+                <Label text="Note / 備註" styleClass="jig-form-label"/>
+                <TextArea fx:id="noteField" prefRowCount="3" wrapText="true"
+                          promptText="Optional remarks / 選填備註..."
+                          styleClass="jig-form-textarea"/>
+            </VBox>
+
+            <!-- Files Section (both modes) -->
+            <VBox fx:id="filesSection" spacing="6" visible="false" managed="false">
+                <Separator/>
+                <Label fx:id="filesSectionLabel" text="Files / 附件" styleClass="jig-form-label"/>
+                <!-- Existing files (populated in edit mode) -->
+                <VBox fx:id="existingFilesBox" spacing="4"/>
+                <!-- Add new files -->
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Button text="+ Add Files / 選擇附件" styleClass="jig-btn-outline-sm"
+                            onAction="#handleAddFiles"/>
+                    <Label fx:id="selectedFilesCountLabel" styleClass="jig-form-hint"
+                           text="No new files selected / 尚未選擇新附件"/>
+                </HBox>
+                <VBox fx:id="selectedFilesBox" spacing="4"/>
+            </VBox>
+
+        </VBox>
+    </ScrollPane>
+
+    <!-- Error Bar (hidden by default) -->
+    <HBox fx:id="errorBar" styleClass="jig-form-error-bar" alignment="CENTER_LEFT" visible="false" managed="false">
+        <padding><Insets top="8" right="16" bottom="8" left="16"/></padding>
+        <Label fx:id="errorLabel" styleClass="jig-form-error-label" text="" wrapText="true" maxWidth="Infinity"/>
+    </HBox>
+
+    <!-- Footer Buttons -->
+    <Separator/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Cancel / 取消" styleClass="jig-btn-outline" onAction="#handleCancel" prefWidth="120"/>
+        <Button text="Save / 儲存" styleClass="jig-btn-primary" onAction="#handleSave" prefWidth="120"/>
+    </HBox>
+
+</VBox>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.jig.JigDetailController"
+      prefWidth="920"
+      styleClass="jig-dialog-root">
+
+    <!-- Header -->
+    <HBox styleClass="jig-detail-header" alignment="CENTER_LEFT" spacing="14">
+        <padding><Insets top="14" right="20" bottom="14" left="20"/></padding>
+        <VBox spacing="4" HBox.hgrow="NEVER">
+            <Label fx:id="detailJigNoLabel" text="" styleClass="jig-detail-jigno"/>
+            <Label fx:id="detailJigNameLabel" text="" styleClass="jig-detail-jigname"/>
+        </VBox>
+        <Label fx:id="detailStatusBadge" text="" styleClass="jig-status-badge"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="detailEditBtn"   text="✎  Edit / 編輯"         styleClass="jig-btn-outline-light" onAction="#handleEdit"/>
+        <Button fx:id="detailStatusBtn" text="⇄  Change Status / 改狀態" styleClass="jig-btn-outline-light" onAction="#handleChangeStatus"/>
+        <Button text="✕  Close / 關閉"  styleClass="jig-btn-outline-light" onAction="#handleClose"/>
+    </HBox>
+
+    <Separator/>
+
+    <!-- Body: info grid + logs -->
+    <ScrollPane fitToWidth="true" styleClass="jig-form-scroll" VBox.vgrow="ALWAYS">
+        <VBox spacing="16">
+            <padding><Insets top="20" right="24" bottom="24" left="24"/></padding>
+
+            <!-- Info Grid (populated programmatically) -->
+            <GridPane fx:id="infoGrid" hgap="16" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="18"/>
+                    <ColumnConstraints percentWidth="32"/>
+                    <ColumnConstraints percentWidth="18"/>
+                    <ColumnConstraints percentWidth="32"/>
+                </columnConstraints>
+            </GridPane>
+
+            <Separator/>
+
+            <!-- Files Section -->
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <Label text="Files / 附件" styleClass="jig-detail-section-title"/>
+                <Label fx:id="fileSummaryLabel" styleClass="jig-form-hint" text=""/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="uploadFilesBtn" text="⇪  Upload / 上傳附件"
+                        styleClass="jig-btn-outline-sm" onAction="#handleUploadFiles"/>
+            </HBox>
+
+            <TableView fx:id="filesTable" prefHeight="150" styleClass="jig-table">
+                <columns>
+                    <TableColumn fx:id="colFileName"    text="Filename / 檔名"    prefWidth="290"/>
+                    <TableColumn fx:id="colFileSize"    text="Size / 大小"        prefWidth="80"/>
+                    <TableColumn fx:id="colUploadedAt"  text="Uploaded / 上傳時間" prefWidth="145"/>
+                    <TableColumn fx:id="colFileActions" text="Actions"            prefWidth="155"/>
+                </columns>
+                <placeholder>
+                    <Label text="No files attached / 尚無附件" styleClass="jig-placeholder-label"/>
+                </placeholder>
+            </TableView>
+
+            <Separator/>
+
+            <!-- Logs Section -->
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Label text="Change Logs / 異動紀錄" styleClass="jig-detail-section-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="↺ Refresh" styleClass="jig-btn-outline-sm" onAction="#handleRefreshLogs"/>
+            </HBox>
+
+            <TableView fx:id="logsTable" prefHeight="220" styleClass="jig-table">
+                <columns>
+                    <TableColumn fx:id="colLogDate"     text="Date / 日期時間"     prefWidth="155"/>
+                    <TableColumn fx:id="colLogAction"   text="Action / 動作"       prefWidth="155"/>
+                    <TableColumn fx:id="colLogDetails"  text="Details / 詳情"      prefWidth="340"/>
+                    <TableColumn fx:id="colLogOperator" text="Operator / 操作者"   prefWidth="120"/>
+                </columns>
+                <placeholder>
+                    <Label text="No logs / 尚無異動紀錄" styleClass="jig-placeholder-label"/>
+                </placeholder>
+            </TableView>
+
+        </VBox>
+    </ScrollPane>
+
+</VBox>

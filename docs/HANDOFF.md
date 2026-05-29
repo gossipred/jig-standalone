@@ -2,7 +2,7 @@
 # 安裝移交說明文件
 
 **版本：** 1.0.0  
-**更新：** 2026-05-28  
+**更新：** 2026-05-29  
 **適用：** 系統管理員 / IT 人員
 
 ---
@@ -58,7 +58,7 @@
 
 | 帳號 | 密碼 |
 |------|------|
-| `admin` | `admin123` |
+| `admin` | `123456` |
 
 > ⚠️ **請立即修改預設密碼！**  
 > 登入後 → Admin Management → Users → 選擇 admin → Reset Password
@@ -168,7 +168,7 @@ Windows： C:\Users\{username}\.jig-standalone\
 A: 有另一個 App 實例正在運行。關閉其他視窗或重新開機後再試。
 
 **Q: 忘記 admin 密碼怎麼辦？**  
-A: 直接刪除 `~/.jig-standalone/data/jigdb.mv.db`（資料會清空），重新啟動會產生預設帳號 `admin / admin123`。或從備份還原。
+A: 直接刪除 `~/.jig-standalone/data/jigdb.mv.db`（資料會清空），重新啟動會產生預設帳號 `admin / 123456`。或從備份還原。
 
 **Q: 如何在多台電腦共用資料？**  
 A: 將 `~/.jig-standalone/` 目錄指向共用磁碟（NAS），或定期用備份同步。目前版本不支援即時多人同時存取。

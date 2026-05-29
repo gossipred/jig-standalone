@@ -2,7 +2,7 @@
 # 專案計畫書
 
 **版本：** 1.0.0  
-**更新：** 2026-05-28  
+**更新：** 2026-05-29  
 **架構：** JavaFX 21 + Spring Boot 3.5 + H2 (file mode)
 
 ---
@@ -63,21 +63,26 @@ UI 層          JavaFX 21 (FXML + CSS)
   - [x] 刪除 `~/.jig-standalone/` 目錄
   - [x] 跨平台（macOS / Windows）
 
-### 🔄 Phase 3 — Jig 治具管理（進行中）
+### ✅ Phase 3 — Jig 治具管理（完成）
 
-- [ ] 治具列表（搜尋、篩選、排序）
-- [ ] 治具詳細資料頁
-- [ ] 新增 / 編輯治具
-- [ ] 狀態管理（使用中 / 維修中 / 報廢）
-- [ ] 圖紙附件上傳與預覽
-- [ ] 到期日提醒
-- [ ] 匯入 CSV
+- [x] 治具列表（搜尋、狀態篩選、狀態 badge）
+- [x] 新增治具（Form Dialog，含自動產生 Jig No.）
+- [x] 編輯治具（Form Dialog）
+- [x] 刪除治具（ADMIN 限定，含子資料 jig_files / jig_logs 清除）
+- [x] 到期日顏色警示（逾期/30天內/正常）
+- [x] 治具詳細資料頁（info grid + Files 表格 + Change Logs 表格）
+- [x] 狀態快速切換 Quick Status Change（含備註，狀態不變時存 NOTE log）
+- [x] 圖紙附件上傳、開啟（背景 Thread）、刪除
+- [x] 匯入 CSV（預覽對話框、New/Update/Error badge、下載範本）
+- [x] 匯出 CSV（全部或選取，FileChooser 存檔）
 
-### 📋 Phase 4 — 報表與日誌
+### 🔄 Phase 4 — 報表與日誌（進行中）
 
-- [ ] 異動紀錄查詢
-- [ ] 狀態統計圖表
-- [ ] CSV 匯出
+- [x] Nav Bar — Jigs / Logs / Stats 三頁切換（main.fxml + MainController 動態 load）
+- [x] 跨 Jig 異動紀錄查詢（日期範圍、操作者、動作類型，預設最近 7 天）
+- [x] Log 頁 Export CSV
+- [x] 狀態統計圖表（JavaFX PieChart + 各狀態件數/百分比卡片）
+- [ ] 匯出 Excel / PDF 報表
 - [ ] 列印報表
 
 ### 📦 Phase 5 — 打包與發布
@@ -93,9 +98,9 @@ UI 層          JavaFX 21 (FXML + CSS)
 ```
 users          帳號資料（username, password, role, enabled）
 user_logs      帳號操作紀錄
-jigs           治具主資料（Phase 3）
-jig_files      圖紙附件（Phase 3）
-import_logs    CSV 匯入紀錄（Phase 3）
+jigs           治具主資料
+jig_files      圖紙附件（外鍵 jig_id → jigs）
+jig_logs       治具異動紀錄（外鍵 jig_id → jigs，action_type: CREATE/UPDATE/DELETE/STATUS_CHANGE/DUE_DATE_CHANGE/NOTE/FILE_UPLOAD/FILE_REPLACE/FILE_DELETE）
 ```
 
 ---

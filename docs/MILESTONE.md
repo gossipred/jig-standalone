@@ -1,15 +1,15 @@
 # Milestone 進度追蹤
 
-**更新：** 2026-05-28
+**更新：** 2026-05-29
 
 ---
 
-## 目前狀態：Phase 2 完成，Phase 3 待開始
+## 目前狀態：Phase 3 完成，Phase 4 待開始
 
 ```
 Phase 1  [██████████] 100%  ✅ 完成
 Phase 2  [██████████] 100%  ✅ 完成
-Phase 3  [░░░░░░░░░░]   0%  🔄 待開始
+Phase 3  [██████████] 100%  ✅ 完成
 Phase 4  [░░░░░░░░░░]   0%  📋 規劃中
 Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 ```
@@ -56,17 +56,47 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 
 ---
 
-## Phase 3 — Jig 治具管理 🔄 待開始
+## Phase 3 — Jig 治具管理 ✅ 完成
 
-| 項目 | 狀態 | 預計 |
-|------|------|------|
-| 治具列表頁（搜尋/篩選/排序） | ⬜ | TBD |
-| 治具詳細資料頁 | ⬜ | TBD |
-| 新增 / 編輯治具 | ⬜ | TBD |
-| 狀態管理（使用中/維修中/報廢） | ⬜ | TBD |
-| 圖紙附件上傳與預覽 | ⬜ | TBD |
-| 到期日提醒 | ⬜ | TBD |
-| 匯入 CSV | ⬜ | TBD |
+| 項目 | 狀態 | 完成日期 |
+|------|------|----------|
+| 治具列表頁（搜尋/篩選/狀態 badge） | ✅ | 2026-05-29 |
+| 新增 / 編輯治具（完整 form dialog） | ✅ | 2026-05-29 |
+| 刪除治具（ADMIN 限定，含子資料清除） | ✅ | 2026-05-29 |
+| 到期日顏色警示（逾期/30天內） | ✅ | 2026-05-29 |
+| 治具詳細資料頁（info grid + 異動紀錄） | ✅ | 2026-05-29 |
+| 狀態快速切換（Change Status + Note） | ✅ | 2026-05-29 |
+| 圖紙附件上傳與預覽（FileChooser + Desktop.open） | ✅ | 2026-05-29 |
+| 匯入 CSV（預覽 + 批次匯入 + 下載範本） | ✅ | 2026-05-29 |
+| 匯出 CSV（Export all / selected jigs） | ✅ | 2026-05-29 |
+
+**Phase 3 修復 Bug（共 9 個，2026-05-29 全數修完）**
+
+| Bug | 修正說明 |
+|-----|---------|
+| 附件刪除失敗 | 路徑解析改為 `uploadDir.resolve(storedPath)` |
+| Detail view 刪檔後不刷新 | 加 try-catch 確保 `loadFiles()` 執行 |
+| Logout NPE cascade | Selection listener 加 null guard |
+| LoginController 二次 load 失敗 | 改 `@Scope("prototype")` |
+| Upload log H2 constraint 錯誤 | DbEnumMigration 修復 CHECK constraint |
+| File Open macOS 衝突 | `Desktop.open()` 移至獨立 Thread |
+| Import CSV 底部按鈕消失 | `loadPreview()` 末尾加 `sizeToScene()` |
+| Delete Jig 無反應 | 先刪 jig_files + jig_logs 再刪 jig |
+| Change Status note 不見 | 狀態不變時若有 note 改存 `NOTE` log |
+
+---
+
+## Phase 4 — 報表與日誌 🔄 進行中
+
+| 項目 | 狀態 | 完成日期 |
+|------|------|----------|
+| Nav Bar（Jigs / Logs / Stats 三頁切換） | ✅ | 2026-05-29 |
+| 跨 Jig 異動紀錄查詢（日期/操作者/動作類型） | ✅ | 2026-05-29 |
+| 無篩選條件時預設顯示最近 7 天 | ✅ | 2026-05-29 |
+| Log 頁 Export CSV | ✅ | 2026-05-29 |
+| 狀態統計圖表（PieChart + 各狀態件數/百分比） | ✅ | 2026-05-29 |
+| 匯出 Excel / PDF 報表 | 📋 | — |
+| 列印報表 | 📋 | — |
 
 ---
 
@@ -80,6 +110,6 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 
 ## 下一步行動
 
-1. 在 GitHub repo 建立 `standalone/version.json` 和 `web/version.json`
-2. 建立第一個 GitHub Release `standalone-v1.0.0`
-3. 開始 Phase 3 治具列表頁開發
+1. 開始 Phase 4：跨 Jig 日誌查詢頁面
+2. 在 GitHub repo 建立 `standalone/version.json`
+3. 建立第一個 GitHub Release `standalone-v1.0.0`

@@ -65,6 +65,9 @@ public class Jig {
 
     private String dri;
 
+    @Column(length = 1000)
+    private String note;
+
     @Column(name = "start_date")
     private LocalDate startDate;
 
@@ -217,6 +220,14 @@ public class Jig {
 
     public void setDri(String dri) {
         this.dri = dri;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public LocalDate getStartDate() {

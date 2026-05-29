@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.jig.JigImportDialogController"
+      prefWidth="760"
+      styleClass="jig-dialog-root">
+
+    <!-- Header -->
+    <HBox styleClass="jig-dialog-header" alignment="CENTER_LEFT">
+        <padding><Insets top="14" right="24" bottom="14" left="24"/></padding>
+        <VBox spacing="3">
+            <Label text="Import CSV" styleClass="jig-dialog-title"/>
+            <Label text="從 CSV 檔案匯入治模具資料" styleClass="jig-dialog-title-zh"/>
+        </VBox>
+    </HBox>
+
+    <!-- Body -->
+    <VBox spacing="12">
+        <padding><Insets top="18" right="20" bottom="8" left="20"/></padding>
+
+        <!-- File Selection -->
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="CSV File / 選擇檔案：" styleClass="jig-form-label"/>
+            <TextField fx:id="filePathField" editable="false" styleClass="jig-form-field"
+                       promptText="No file selected / 尚未選擇檔案" HBox.hgrow="ALWAYS"/>
+            <Button text="Browse / 選擇" styleClass="jig-btn-outline" onAction="#handleBrowse"/>
+        </HBox>
+
+        <!-- Format hint -->
+        <Label styleClass="jig-form-hint"
+               text="Required columns 必填欄：JT No. · Model Name · JT Name    Optional 選填：Classification · Customer · Ass'y Line · Qty · Status · DRI · Start Date · Due Date"/>
+
+        <!-- Summary Row (shown after file loaded) -->
+        <HBox fx:id="summaryBox" alignment="CENTER_LEFT" spacing="16"
+              visible="false" managed="false">
+            <Label fx:id="summaryLabel" styleClass="jig-import-summary-label" text=""/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <CheckBox fx:id="updateExistingCheck" text="Update existing JTs / 更新已有治模具" selected="true"
+                      styleClass="jig-import-checkbox"/>
+        </HBox>
+
+        <!-- Preview Table (shown after file loaded) -->
+        <TableView fx:id="previewTable" prefHeight="300" styleClass="jig-table"
+                   visible="false" managed="false">
+            <columns>
+                <TableColumn fx:id="colLine"          text="Line" prefWidth="50"/>
+                <TableColumn fx:id="colPreviewJigNo"  text="JT No."         prefWidth="130"/>
+                <TableColumn fx:id="colPreviewModel"  text="Model Name"     prefWidth="130"/>
+                <TableColumn fx:id="colPreviewJigName" text="JT Name"       prefWidth="170"/>
+                <TableColumn fx:id="colPreviewAction" text="Action / 動作"  prefWidth="100"/>
+                <TableColumn fx:id="colPreviewError"  text="Error / 備註"   prefWidth="145"/>
+            </columns>
+            <placeholder>
+                <Label text="No data / 無資料" styleClass="jig-placeholder-label"/>
+            </placeholder>
+        </TableView>
+
+    </VBox>
+
+    <!-- Error Bar -->
+    <HBox fx:id="errorBar" styleClass="jig-form-error-bar" alignment="CENTER_LEFT"
+          visible="false" managed="false">
+        <padding><Insets top="7" right="16" bottom="7" left="16"/></padding>
+        <Label fx:id="errorLabel" styleClass="jig-form-error-label" text="" wrapText="true" maxWidth="Infinity"/>
+    </HBox>
+
+    <!-- Footer -->
+    <Separator/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <padding><Insets top="12" right="20" bottom="12" left="20"/></padding>
+        <Button text="Download Template / 下載範本" styleClass="jig-btn-outline"
+                onAction="#handleDownloadTemplate"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Cancel / 取消" styleClass="jig-btn-outline" onAction="#handleCancel" prefWidth="110"/>
+        <Button fx:id="importBtn" text="Import / 匯入" styleClass="jig-btn-primary"
+                onAction="#handleImport" prefWidth="110" disable="true"/>
+    </HBox>
+
+</VBox>

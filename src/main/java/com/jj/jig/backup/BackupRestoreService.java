@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
@@ -29,7 +29,7 @@ public class BackupRestoreService {
 
     // Creates a backup folder containing DB zip + uploads copy
     public Path createBackup(Path targetDir) throws IOException {
-        String timestamp = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmm"));
         Path backupDir = targetDir.resolve("jig-backup-" + timestamp);
         Files.createDirectories(backupDir);
 

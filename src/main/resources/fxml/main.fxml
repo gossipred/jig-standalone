@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane fx:id="mainRoot" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.jj.jig.ui.main.MainController"
             styleClass="main-root">
 
@@ -23,16 +23,21 @@
                         styleClass="topbar-admin-btn"
                         onAction="#handleOpenAdminManagement"
                         visible="false" managed="false"/>
+                <Button text="Logout / 離開" styleClass="topbar-logout-btn"
+                        onAction="#handleLogout"/>
+            </HBox>
+            <Separator/>
+            <!-- Nav Bar -->
+            <HBox styleClass="main-navbar" alignment="CENTER_LEFT" spacing="4">
+                <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+                <Button fx:id="navJigsBtn"  text="☰  JTs / 治模具列表"  styleClass="main-nav-btn" onAction="#handleNavJigs"/>
+                <Button fx:id="navLogsBtn"  text="⊟  Logs / 異動日誌"   styleClass="main-nav-btn" onAction="#handleNavLogs"/>
+                <Button fx:id="navStatsBtn" text="◑  Stats / 統計"       styleClass="main-nav-btn" onAction="#handleNavStats"/>
             </HBox>
             <Separator/>
         </VBox>
     </top>
 
-    <center>
-        <VBox alignment="CENTER" spacing="16">
-            <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
-            <Label text="Main window — Phase 3 in progress" styleClass="placeholder-hint"/>
-        </VBox>
-    </center>
+    <!-- center is set dynamically by MainController -->
 
 </BorderPane>

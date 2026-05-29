@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -50,6 +51,32 @@ public class JigFileStorageService {
         }
     }
 
+    public StoredJigFile store(Path sourcePath, String originalFilename, String contentType, String jigNo) {
+        String cleanFilename = StringUtils.cleanPath(originalFilename == null ? "jig-file" : originalFilename);
+        if (cleanFilename.contains("..")) {
+            throw new IllegalArgumentException("File name cannot contain path traversal.");
+        }
+
+        String extension = getExtension(cleanFilename);
+        String safeJigNo = jigNo.replaceAll("[^A-Z0-9-]", "_");
+        String storedFilename = safeJigNo + "-" + UUID.randomUUID() + extension;
+
+        try {
+            Files.createDirectories(uploadDir);
+            Path target = uploadDir.resolve(storedFilename).normalize();
+            Files.copy(sourcePath, target, StandardCopyOption.REPLACE_EXISTING);
+            long fileSize = Files.size(sourcePath);
+            return new StoredJigFile(
+                    cleanFilename,
+                    Path.of("uploads", "jigs", storedFilename).toString(),
+                    contentType != null ? contentType : "application/octet-stream",
+                    fileSize
+            );
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("File upload failed: " + cleanFilename, ex);
+        }
+    }
+
     public Resource loadAsResource(String storedPath) {
         try {
             Path requestedPath = Path.of(storedPath).toAbsolutePath().normalize();
@@ -72,8 +99,8 @@ public class JigFileStorageService {
             return;
         }
 
-        Path requestedPath = Path.of(storedPath).toAbsolutePath().normalize();
-        if (!requestedPath.startsWith(uploadDir.getParent())) {
+        Path requestedPath = uploadDir.resolve(storedPath).normalize();
+        if (!requestedPath.startsWith(uploadDir)) {
             throw new IllegalArgumentException("Invalid file path.");
         }
 

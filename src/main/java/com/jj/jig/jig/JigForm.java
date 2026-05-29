@@ -53,6 +53,9 @@ public class JigForm {
     @Size(max = 100)
     private String dri;
 
+    @Size(max = 1000)
+    private String note;
+
     private LocalDate startDate;
 
     private LocalDate dueDate;
@@ -71,6 +74,7 @@ public class JigForm {
         form.setPrNo(jig.getPrNo());
         form.setStatus(jig.getStatus());
         form.setDri(jig.getDri());
+        form.setNote(jig.getNote());
         form.setStartDate(jig.getStartDate());
         form.setDueDate(jig.getDueDate());
         return form;
@@ -178,6 +182,14 @@ public class JigForm {
 
     public void setDri(String dri) {
         this.dri = dri;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public LocalDate getStartDate() {

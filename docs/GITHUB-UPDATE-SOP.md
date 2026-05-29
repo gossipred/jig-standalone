@@ -2,7 +2,7 @@
 # GitHub 版本更新標準作業程序
 
 **Repository:** https://github.com/gossipred/jig-and-toolings-management-system  
-**Last Updated:** 2026-05-28
+**Last Updated:** 2026-05-29
 
 ---
 

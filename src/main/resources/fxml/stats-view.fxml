@@ -19,6 +19,8 @@
         <Label text="Statistics / 統計" styleClass="jig-list-title"/>
         <Region HBox.hgrow="ALWAYS"/>
         <Button text="↺  Refresh / 重新整理" styleClass="jig-btn-outline" onAction="#handleRefresh"/>
+        <Separator orientation="VERTICAL"/>
+        <Button text="⇩  Export PDF" styleClass="jig-btn-outline" onAction="#handleExportPdf"/>
     </HBox>
 
     <!-- Content -->

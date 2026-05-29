@@ -78,11 +78,13 @@ UI 層          JavaFX 21 (FXML + CSS)
 
 ### 🔄 Phase 4 — 報表與日誌（進行中）
 
-- [x] Nav Bar — Jigs / Logs / Stats 三頁切換（main.fxml + MainController 動態 load）
-- [x] 跨 Jig 異動紀錄查詢（日期範圍、操作者、動作類型，預設最近 7 天）
+- [x] Nav Bar — JTs / Logs / Stats 三頁切換（main.fxml + MainController 動態 load）
+- [x] 跨 JT 異動紀錄查詢（日期範圍、操作者、動作類型，預設最近 7 天）
 - [x] Log 頁 Export CSV
 - [x] 狀態統計圖表（JavaFX PieChart + 各狀態件數/百分比卡片）
-- [ ] 匯出 Excel / PDF 報表
+- [x] 備份資料夾加入 HHmm 時間戳記
+- [x] UpdateService URL 修正（新 repo：gossipred/jig-standalone）
+- [ ] PDF 報表匯出（規劃中，不做 Excel，已有 CSV）
 - [ ] 列印報表
 
 ### 📦 Phase 5 — 打包與發布

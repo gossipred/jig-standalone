@@ -1,17 +1,27 @@
 package com.jj.jig.ui.stats;
 
+import com.jj.jig.export.JigPdfReportService;
 import com.jj.jig.jig.JigService;
 import com.jj.jig.jig.JigStatus;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,14 +29,21 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class StatsViewController {
 
+    private static final DateTimeFormatter FILE_FMT = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm");
+
     @FXML private PieChart statusPieChart;
     @FXML private Label totalLabel;
     @FXML private VBox statsCardBox;
 
-    private final JigService jigService;
+    private Map<JigStatus, Long> lastStats;
+    private long lastTotal;
 
-    public StatsViewController(JigService jigService) {
+    private final JigService jigService;
+    private final JigPdfReportService pdfReportService;
+
+    public StatsViewController(JigService jigService, JigPdfReportService pdfReportService) {
         this.jigService = jigService;
+        this.pdfReportService = pdfReportService;
     }
 
     @FXML
@@ -39,23 +56,46 @@ public class StatsViewController {
         loadStats();
     }
 
-    private void loadStats() {
-        Map<JigStatus, Long> stats = jigService.getStatusStats();
-        long total = jigService.getTotalJigCount();
+    @FXML
+    public void handleExportPdf() {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Export Status Report PDF / 匯出狀態報表");
+        chooser.setInitialFileName("jt-status-report-" + LocalDateTime.now().format(FILE_FMT) + ".pdf");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = chooser.showSaveDialog(getStage());
+        if (file == null) return;
 
-        totalLabel.setText("Total JTs / 治模具總數：" + total);
+        try {
+            pdfReportService.exportStatusReport(
+                    lastStats, lastTotal,
+                    jigService.findJigs(""),
+                    file.toPath());
+            Alert ok = new Alert(AlertType.INFORMATION, "PDF exported. / PDF 已匯出。", ButtonType.OK);
+            ok.setHeaderText(null);
+            ok.showAndWait();
+        } catch (IOException e) {
+            Alert err = new Alert(AlertType.ERROR, "Export failed: " + e.getMessage(), ButtonType.OK);
+            err.setHeaderText(null);
+            err.showAndWait();
+        }
+    }
+
+    private void loadStats() {
+        lastStats = jigService.getStatusStats();
+        lastTotal = jigService.getTotalJigCount();
+
+        totalLabel.setText("Total JTs / 治模具總數：" + lastTotal);
 
         ObservableList<PieChart.Data> pieData = FXCollections.observableArrayList();
         statsCardBox.getChildren().clear();
 
         for (JigStatus status : JigStatus.values()) {
-            long count = stats.getOrDefault(status, 0L);
+            long count = lastStats.getOrDefault(status, 0L);
             if (count > 0) {
                 pieData.add(new PieChart.Data(status.getLabel() + " / " + status.getLabelZh(), count));
             }
-            statsCardBox.getChildren().add(buildStatRow(status, count, total));
+            statsCardBox.getChildren().add(buildStatRow(status, count, lastTotal));
         }
-
         statusPieChart.setData(pieData);
     }
 
@@ -78,5 +118,9 @@ public class StatsViewController {
         row.getChildren().addAll(dot, nameLabel, new Region(), countLabel);
         HBox.setHgrow(row.getChildren().get(2), Priority.ALWAYS);
         return row;
+    }
+
+    private Stage getStage() {
+        return (Stage) statusPieChart.getScene().getWindow();
     }
 }

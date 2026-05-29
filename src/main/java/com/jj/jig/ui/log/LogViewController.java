@@ -1,5 +1,6 @@
 package com.jj.jig.ui.log;
 
+import com.jj.jig.export.JigPdfReportService;
 import com.jj.jig.jig.JigService;
 import com.jj.jig.jig.JigStatus;
 import com.jj.jig.log.JigLog;
@@ -53,9 +54,11 @@ public class LogViewController {
     private List<JigLog> currentResults = List.of();
 
     private final JigService jigService;
+    private final JigPdfReportService pdfReportService;
 
-    public LogViewController(JigService jigService) {
+    public LogViewController(JigService jigService, JigPdfReportService pdfReportService) {
         this.jigService = jigService;
+        this.pdfReportService = pdfReportService;
     }
 
     @FXML
@@ -189,6 +192,45 @@ public class LogViewController {
             Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
 
             Alert ok = new Alert(AlertType.INFORMATION, "Exported successfully. / 匯出完成。", ButtonType.OK);
+            ok.setHeaderText(null);
+            ok.showAndWait();
+        } catch (IOException e) {
+            Alert err = new Alert(AlertType.ERROR, "Export failed: " + e.getMessage(), ButtonType.OK);
+            err.setHeaderText(null);
+            err.showAndWait();
+        }
+    }
+
+    @FXML
+    public void handleExportPdf() {
+        if (currentResults.isEmpty()) {
+            Alert alert = new Alert(AlertType.INFORMATION,
+                    "No data to export. Please search first. / 請先搜尋再匯出。", ButtonType.OK);
+            alert.setHeaderText(null);
+            alert.showAndWait();
+            return;
+        }
+
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Export Log PDF / 匯出日誌報表");
+        chooser.setInitialFileName("jt-activity-log-" + java.time.LocalDateTime.now().format(FILE_FMT) + ".pdf");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = chooser.showSaveDialog(getStage());
+        if (file == null) return;
+
+        ActionTypeItem typeItem = actionTypeFilter.getValue();
+        JigLogActionType actionType = typeItem != null ? typeItem.type() : null;
+        String operator = operatorFilter.getValue();
+
+        try {
+            pdfReportService.exportLogReport(
+                    currentResults,
+                    fromDatePicker.getValue(),
+                    toDatePicker.getValue(),
+                    actionType,
+                    operator,
+                    file.toPath());
+            Alert ok = new Alert(AlertType.INFORMATION, "PDF exported. / PDF 已匯出。", ButtonType.OK);
             ok.setHeaderText(null);
             ok.showAndWait();
         } catch (IOException e) {

@@ -30,6 +30,7 @@
         <Button text="✕  Clear / 清除"  styleClass="jig-btn-outline"  onAction="#handleClear"/>
         <Separator orientation="VERTICAL"/>
         <Button text="⇩  Export CSV"   styleClass="jig-btn-outline"  onAction="#handleExportCsv"/>
+        <Button text="⇩  Export PDF"   styleClass="jig-btn-outline"  onAction="#handleExportPdf"/>
     </HBox>
 
     <!-- Log Table -->

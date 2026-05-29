@@ -1,0 +1,7 @@
+{
+  "version": "1.1.0",
+  "releaseDate": "2026-05-29",
+  "downloadUrl": "https://github.com/gossipred/jig-standalone/releases/tag/v1.1.0",
+  "releaseNotes": "Phase 3 & 4 complete: JT management, file attachments, CSV import/export, cross-JT log query, status statistics chart. Bug fixes and terminology update (Jig → JT).",
+  "releaseNotesZh": "Phase 3 & 4 完成：治模具管理、附件上傳、CSV 匯入匯出、跨治模具異動日誌查詢、狀態統計圖表。修復多個 bug 並更新名稱（Jig → JT）。"
+}

@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 public class UpdateService {
 
     private static final String VERSION_URL =
-            "https://raw.githubusercontent.com/gossipred/jig-and-toolings-management-system" +
-            "/main/standalone/version.json";
+            "https://raw.githubusercontent.com/gossipred/jig-standalone/main/version.json";
 
     private final String currentVersion;
     private final ObjectMapper objectMapper;

@@ -1,7 +1,7 @@
 # GitHub Update SOP — Jig & Toolings Management System
 # GitHub 版本更新標準作業程序
 
-**Repository:** https://github.com/gossipred/jig-and-toolings-management-system  
+**Repository:** https://github.com/gossipred/jig-standalone  
 **Last Updated:** 2026-05-29
 
 ---
@@ -19,10 +19,9 @@ App → 讀取 GitHub raw file → 比對版本號 → 有新版 → 顯示通�
 
 ## GitHub Repo 版本檔案位置
 
-| 版本 | 路徑 | Raw URL |
-|------|------|---------|
-| Standalone | `standalone/version.json` | `https://raw.githubusercontent.com/gossipred/jig-and-toolings-management-system/main/standalone/version.json` |
-| Web | `web/version.json` | `https://raw.githubusercontent.com/gossipred/jig-and-toolings-management-system/main/web/version.json` |
+| 路徑 | Raw URL |
+|------|---------|
+| `version.json` | `https://raw.githubusercontent.com/gossipred/jig-standalone/main/version.json` |
 
 ---
 
@@ -32,7 +31,7 @@ App → 讀取 GitHub raw file → 比對版本號 → 有新版 → 顯示通�
 {
   "version": "1.0.0",
   "releaseDate": "2026-05-28",
-  "downloadUrl": "https://github.com/gossipred/jig-and-toolings-management-system/releases/tag/standalone-v1.0.0",
+  "downloadUrl": "https://github.com/gossipred/jig-standalone/releases/tag/standalone-v1.0.0",
   "releaseNotes": "Bug fixes and new features.",
   "releaseNotesZh": "修復問題與新功能。"
 }
@@ -69,7 +68,7 @@ mvn clean package -DskipTests
 
 ### Step 3 — 在 GitHub 建立 Release
 
-1. 進入 https://github.com/gossipred/jig-and-toolings-management-system
+1. 進入 https://github.com/gossipred/jig-standalone
 2. 右側點 **「Releases」→「Create a new release」**
 3. 填寫：
    - **Tag version:** `standalone-v1.1.0`（standalone 用）或 `web-v1.1.0`（web 用）
@@ -78,7 +77,7 @@ mvn clean package -DskipTests
 4. 上傳檔案：把 `target/jig-standalone-1.1.0.jar` 拖曳上傳
 5. 點 **「Publish release」**
 6. 複製這個 Release 頁面的網址，例如：
-   `https://github.com/gossipred/jig-and-toolings-management-system/releases/tag/standalone-v1.1.0`
+   `https://github.com/gossipred/jig-standalone/releases/tag/standalone-v1.1.0`
 
 ### Step 4 — 更新 GitHub 上的 version.json
 
@@ -88,7 +87,7 @@ mvn clean package -DskipTests
 {
   "version": "1.1.0",
   "releaseDate": "2026-06-01",
-  "downloadUrl": "https://github.com/gossipred/jig-and-toolings-management-system/releases/tag/standalone-v1.1.0",
+  "downloadUrl": "https://github.com/gossipred/jig-standalone/releases/tag/standalone-v1.1.0",
   "releaseNotes": "New features: ...",
   "releaseNotesZh": "新功能：..."
 }

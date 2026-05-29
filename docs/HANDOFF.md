@@ -180,5 +180,5 @@ A: 可以，H2 的 `.mv.db` 格式可跨平台。
 
 ## 技術聯絡
 
-- **GitHub:** https://github.com/gossipred/jig-and-toolings-management-system
-- **Issues:** https://github.com/gossipred/jig-and-toolings-management-system/issues
+- **GitHub:** https://github.com/gossipred/jig-standalone
+- **Issues:** https://github.com/gossipred/jig-standalone/issues

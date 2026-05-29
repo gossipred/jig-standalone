@@ -26,7 +26,9 @@ jobs:
 
       - name: Read version from pom.xml
         id: version
-        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $env:GITHUB_OUTPUT
+        run: |
+          $v = mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+          echo "VERSION=$v" >> $env:GITHUB_OUTPUT
 
       - name: Build fat JAR
         run: mvn clean package -DskipTests
@@ -46,15 +48,16 @@ jobs:
 
       - name: Create MSI (jpackage)
         run: |
-          New-Item -ItemType Directory -Force -Path pkg-input
-          Copy-Item "target\jig-standalone-${{ steps.version.outputs.VERSION }}.jar" pkg-input\
+          New-Item -ItemType Directory -Force -Path pkg-input | Out-Null
+          $jar = "jig-standalone-${{ steps.version.outputs.VERSION }}.jar"
+          Copy-Item "target\$jar" pkg-input\
           jpackage `
             --type msi `
             --name "JIG Standalone" `
             --app-version "${{ steps.version.outputs.VERSION }}" `
             --runtime-image custom-jre `
             --input pkg-input `
-            --main-jar "jig-standalone-${{ steps.version.outputs.VERSION }}.jar" `
+            --main-jar "$jar" `
             --main-class "org.springframework.boot.loader.launch.JarLauncher" `
             --java-options "--add-modules javafx.controls,javafx.fxml" `
             --java-options "-Dfile.encoding=UTF-8" `

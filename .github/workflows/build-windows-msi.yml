@@ -1,0 +1,71 @@
+name: Build Windows MSI
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows-msi:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Add WiX to PATH
+        run: echo "C:\Program Files (x86)\WiX Toolset v3.11\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Read version from pom.xml
+        id: version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $env:GITHUB_OUTPUT
+
+      - name: Build fat JAR
+        run: mvn clean package -DskipTests
+
+      - name: Download JavaFX jmods for Windows x64
+        run: |
+          curl -L "https://download2.gluonhq.com/openjfx/21.0.2/openjfx-21.0.2_windows-x64_bin-jmods.zip" -o javafx-jmods.zip
+          Expand-Archive -Path javafx-jmods.zip -DestinationPath .
+
+      - name: Create custom JRE (jlink)
+        run: |
+          jlink `
+            --module-path "javafx-jmods-21.0.2;$env:JAVA_HOME\jmods" `
+            --add-modules java.base,java.desktop,java.instrument,java.logging,java.management,java.naming,java.net.http,java.prefs,java.rmi,java.security.jgss,java.sql,javafx.controls,javafx.fxml,jdk.unsupported,jdk.unsupported.desktop `
+            --strip-debug --no-man-pages --no-header-files --compress=2 `
+            --output custom-jre
+
+      - name: Create MSI (jpackage)
+        run: |
+          New-Item -ItemType Directory -Force -Path pkg-input
+          Copy-Item "target\jig-standalone-${{ steps.version.outputs.VERSION }}.jar" pkg-input\
+          jpackage `
+            --type msi `
+            --name "JIG Standalone" `
+            --app-version "${{ steps.version.outputs.VERSION }}" `
+            --runtime-image custom-jre `
+            --input pkg-input `
+            --main-jar "jig-standalone-${{ steps.version.outputs.VERSION }}.jar" `
+            --main-class "org.springframework.boot.loader.launch.JarLauncher" `
+            --java-options "--add-modules javafx.controls,javafx.fxml" `
+            --java-options "-Dfile.encoding=UTF-8" `
+            --win-dir-chooser `
+            --win-menu `
+            --win-shortcut `
+            --dest output
+
+      - name: Upload MSI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JIG-Standalone-${{ steps.version.outputs.VERSION }}-Windows-x64
+          path: output/*.msi
+          retention-days: 90

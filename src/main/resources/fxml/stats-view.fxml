@@ -20,7 +20,7 @@
         <Region HBox.hgrow="ALWAYS"/>
         <Button text="↺  Refresh / 重新整理" styleClass="jig-btn-outline" onAction="#handleRefresh"/>
         <Separator orientation="VERTICAL"/>
-        <Button text="⇩  Export PDF" styleClass="jig-btn-outline" onAction="#handleExportPdf"/>
+        <Button text="⎙  Print / 列印" styleClass="jig-btn-outline" onAction="#handlePrint"/>
     </HBox>
 
     <!-- Content -->

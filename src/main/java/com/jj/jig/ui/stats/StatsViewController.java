@@ -1,35 +1,40 @@
 package com.jj.jig.ui.stats;
 
-import com.jj.jig.export.JigPdfReportService;
 import com.jj.jig.jig.JigService;
 import com.jj.jig.jig.JigStatus;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.print.PageLayout;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
 public class StatsViewController {
-
-    private static final DateTimeFormatter FILE_FMT = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm");
 
     @FXML private PieChart statusPieChart;
     @FXML private Label totalLabel;
@@ -39,11 +44,9 @@ public class StatsViewController {
     private long lastTotal;
 
     private final JigService jigService;
-    private final JigPdfReportService pdfReportService;
 
-    public StatsViewController(JigService jigService, JigPdfReportService pdfReportService) {
+    public StatsViewController(JigService jigService) {
         this.jigService = jigService;
-        this.pdfReportService = pdfReportService;
     }
 
     @FXML
@@ -57,27 +60,60 @@ public class StatsViewController {
     }
 
     @FXML
-    public void handleExportPdf() {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("Export Status Report PDF / 匯出狀態報表");
-        chooser.setInitialFileName("jt-status-report-" + LocalDateTime.now().format(FILE_FMT) + ".pdf");
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        File file = chooser.showSaveDialog(getStage());
-        if (file == null) return;
-
-        try {
-            pdfReportService.exportStatusReport(
-                    lastStats, lastTotal,
-                    jigService.findJigs(""),
-                    file.toPath());
-            Alert ok = new Alert(AlertType.INFORMATION, "PDF exported. / PDF 已匯出。", ButtonType.OK);
-            ok.setHeaderText(null);
-            ok.showAndWait();
-        } catch (IOException e) {
-            Alert err = new Alert(AlertType.ERROR, "Export failed: " + e.getMessage(), ButtonType.OK);
-            err.setHeaderText(null);
-            err.showAndWait();
+    public void handlePrint() {
+        List<Printer> printers = new ArrayList<>(Printer.getAllPrinters());
+        if (printers.isEmpty()) {
+            new Alert(AlertType.ERROR, "No printer configured. / 未設定印表機。", ButtonType.OK).showAndWait();
+            return;
         }
+
+        Printer chosen = showPrinterChooser(printers);
+        if (chosen == null) return;
+
+        PrinterJob job = PrinterJob.createPrinterJob(chosen);
+        if (job == null) return;
+
+        Node contentNode = statusPieChart.getParent();
+        PageLayout layout = job.getJobSettings().getPageLayout();
+        WritableImage img = contentNode.snapshot(new SnapshotParameters(), null);
+        ImageView iv = new ImageView(img);
+        double scale = Math.min(
+            layout.getPrintableWidth()  / img.getWidth(),
+            layout.getPrintableHeight() / img.getHeight()
+        );
+        iv.setFitWidth(img.getWidth() * scale);
+        iv.setFitHeight(img.getHeight() * scale);
+        iv.setPreserveRatio(true);
+
+        if (job.printPage(layout, iv)) {
+            job.endJob();
+            new Alert(AlertType.INFORMATION, "Sent to printer. / 已送出至印表機。", ButtonType.OK).showAndWait();
+        } else {
+            new Alert(AlertType.ERROR, "Print failed. / 列印失敗。", ButtonType.OK).showAndWait();
+        }
+    }
+
+    private Printer showPrinterChooser(List<Printer> printers) {
+        Dialog<Printer> dialog = new Dialog<>();
+        dialog.setTitle("Print / 列印");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        ComboBox<Printer> combo = new ComboBox<>();
+        combo.getItems().addAll(printers);
+        combo.setConverter(new StringConverter<>() {
+            @Override public String toString(Printer p)    { return p == null ? "" : p.getName(); }
+            @Override public Printer fromString(String s)  { return null; }
+        });
+        Printer def = Printer.getDefaultPrinter();
+        combo.setValue(def != null && printers.contains(def) ? def : printers.get(0));
+        combo.setPrefWidth(300);
+
+        VBox content = new VBox(8, new Label("Select printer / 選擇印表機："), combo);
+        content.setPadding(new Insets(12, 16, 4, 16));
+        dialog.getDialogPane().setContent(content);
+        dialog.setResultConverter(bt -> bt == ButtonType.OK ? combo.getValue() : null);
+        return dialog.showAndWait().orElse(null);
     }
 
     private void loadStats() {

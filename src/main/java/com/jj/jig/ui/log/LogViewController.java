@@ -1,6 +1,5 @@
 package com.jj.jig.ui.log;
 
-import com.jj.jig.export.JigPdfReportService;
 import com.jj.jig.jig.JigService;
 import com.jj.jig.jig.JigStatus;
 import com.jj.jig.log.JigLog;
@@ -10,12 +9,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.print.PageLayout;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -25,9 +31,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import java.util.ArrayList;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -35,8 +52,8 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 public class LogViewController {
 
-    private static final DateTimeFormatter DT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-    private static final DateTimeFormatter FILE_FMT = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm");
+    private static final DateTimeFormatter DT_FMT   = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter FILE_FMT  = DateTimeFormatter.ofPattern("yyyyMMdd-HHmm");
 
     @FXML private DatePicker fromDatePicker;
     @FXML private DatePicker toDatePicker;
@@ -54,11 +71,9 @@ public class LogViewController {
     private List<JigLog> currentResults = List.of();
 
     private final JigService jigService;
-    private final JigPdfReportService pdfReportService;
 
-    public LogViewController(JigService jigService, JigPdfReportService pdfReportService) {
+    public LogViewController(JigService jigService) {
         this.jigService = jigService;
-        this.pdfReportService = pdfReportService;
     }
 
     @FXML
@@ -75,8 +90,8 @@ public class LogViewController {
         }
         actionTypeFilter.setItems(FXCollections.observableArrayList(items));
         actionTypeFilter.setConverter(new StringConverter<>() {
-            @Override public String toString(ActionTypeItem i)    { return i == null ? "" : i.label(); }
-            @Override public ActionTypeItem fromString(String s)  { return null; }
+            @Override public String toString(ActionTypeItem i)   { return i == null ? "" : i.label(); }
+            @Override public ActionTypeItem fromString(String s) { return null; }
         });
         actionTypeFilter.getSelectionModel().selectFirst();
 
@@ -134,7 +149,6 @@ public class LogViewController {
         LocalDate from = fromDatePicker.getValue();
         LocalDate to   = toDatePicker.getValue();
 
-        // 未填日期時預設最近 7 天
         if (from == null && to == null) {
             from = LocalDate.now().minusDays(6);
             fromDatePicker.setValue(from);
@@ -163,16 +177,14 @@ public class LogViewController {
     @FXML
     public void handleExportCsv() {
         if (currentResults.isEmpty()) {
-            Alert alert = new Alert(AlertType.INFORMATION,
-                    "No data to export. Please search first. / 請先搜尋再匯出。", ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            new Alert(AlertType.INFORMATION,
+                    "No data to export. Please search first. / 請先搜尋再匯出。", ButtonType.OK).showAndWait();
             return;
         }
 
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Export Log CSV / 匯出日誌");
-        chooser.setInitialFileName("jig-logs-" + java.time.LocalDateTime.now().format(FILE_FMT) + ".csv");
+        chooser.setInitialFileName("jig-logs-" + LocalDateTime.now().format(FILE_FMT) + ".csv");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
         File file = chooser.showSaveDialog(getStage());
         if (file == null) return;
@@ -190,55 +202,152 @@ public class LogViewController {
                         csv(log.getUser() != null ? log.getUser().getUsername() : "")));
             }
             Files.write(file.toPath(), lines, StandardCharsets.UTF_8);
-
-            Alert ok = new Alert(AlertType.INFORMATION, "Exported successfully. / 匯出完成。", ButtonType.OK);
-            ok.setHeaderText(null);
-            ok.showAndWait();
+            new Alert(AlertType.INFORMATION, "Exported successfully. / 匯出完成。", ButtonType.OK).showAndWait();
         } catch (IOException e) {
-            Alert err = new Alert(AlertType.ERROR, "Export failed: " + e.getMessage(), ButtonType.OK);
-            err.setHeaderText(null);
-            err.showAndWait();
+            new Alert(AlertType.ERROR, "Export failed: " + e.getMessage(), ButtonType.OK).showAndWait();
         }
     }
 
     @FXML
-    public void handleExportPdf() {
+    public void handlePrint() {
         if (currentResults.isEmpty()) {
-            Alert alert = new Alert(AlertType.INFORMATION,
-                    "No data to export. Please search first. / 請先搜尋再匯出。", ButtonType.OK);
-            alert.setHeaderText(null);
-            alert.showAndWait();
+            new Alert(AlertType.INFORMATION,
+                    "No data to print. Search first. / 請先搜尋再列印。", ButtonType.OK).showAndWait();
             return;
         }
 
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("Export Log PDF / 匯出日誌報表");
-        chooser.setInitialFileName("jt-activity-log-" + java.time.LocalDateTime.now().format(FILE_FMT) + ".pdf");
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        File file = chooser.showSaveDialog(getStage());
-        if (file == null) return;
+        List<Printer> printers = new ArrayList<>(Printer.getAllPrinters());
+        if (printers.isEmpty()) {
+            new Alert(AlertType.ERROR, "No printer configured. / 未設定印表機。", ButtonType.OK).showAndWait();
+            return;
+        }
 
-        ActionTypeItem typeItem = actionTypeFilter.getValue();
-        JigLogActionType actionType = typeItem != null ? typeItem.type() : null;
-        String operator = operatorFilter.getValue();
+        Printer chosen = showPrinterChooser(printers);
+        if (chosen == null) return;
 
-        try {
-            pdfReportService.exportLogReport(
-                    currentResults,
-                    fromDatePicker.getValue(),
-                    toDatePicker.getValue(),
-                    actionType,
-                    operator,
-                    file.toPath());
-            Alert ok = new Alert(AlertType.INFORMATION, "PDF exported. / PDF 已匯出。", ButtonType.OK);
-            ok.setHeaderText(null);
-            ok.showAndWait();
-        } catch (IOException e) {
-            Alert err = new Alert(AlertType.ERROR, "Export failed: " + e.getMessage(), ButtonType.OK);
-            err.setHeaderText(null);
-            err.showAndWait();
+        PrinterJob job = PrinterJob.createPrinterJob(chosen);
+        if (job == null) return;
+
+        Node printNode = buildLogPrintNode();
+        PageLayout layout = job.getJobSettings().getPageLayout();
+        WritableImage img = printNode.snapshot(new SnapshotParameters(), null);
+        ImageView iv = new ImageView(img);
+        double scale = Math.min(
+            layout.getPrintableWidth()  / img.getWidth(),
+            layout.getPrintableHeight() / img.getHeight()
+        );
+        iv.setFitWidth(img.getWidth() * scale);
+        iv.setFitHeight(img.getHeight() * scale);
+        iv.setPreserveRatio(true);
+
+        if (job.printPage(layout, iv)) {
+            job.endJob();
+            new Alert(AlertType.INFORMATION, "Sent to printer. / 已送出至印表機。", ButtonType.OK).showAndWait();
+        } else {
+            new Alert(AlertType.ERROR, "Print failed. / 列印失敗。", ButtonType.OK).showAndWait();
         }
     }
+
+    private Printer showPrinterChooser(List<Printer> printers) {
+        javafx.scene.control.Dialog<Printer> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("Print / 列印");
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        ComboBox<Printer> combo = new ComboBox<>();
+        combo.getItems().addAll(printers);
+        combo.setConverter(new StringConverter<>() {
+            @Override public String toString(Printer p)   { return p == null ? "" : p.getName(); }
+            @Override public Printer fromString(String s) { return null; }
+        });
+        Printer def = Printer.getDefaultPrinter();
+        combo.setValue(def != null && printers.contains(def) ? def : printers.get(0));
+        combo.setPrefWidth(300);
+
+        javafx.scene.layout.VBox content = new javafx.scene.layout.VBox(8,
+            new Label("Select printer / 選擇印表機："), combo);
+        content.setPadding(new Insets(12, 16, 4, 16));
+        dialog.getDialogPane().setContent(content);
+        dialog.setResultConverter(bt -> bt == ButtonType.OK ? combo.getValue() : null);
+        return dialog.showAndWait().orElse(null);
+    }
+
+    // ── Print layout builder ──────────────────────────────────────────────────
+
+    private Node buildLogPrintNode() {
+        double[] colWidths = {130, 75, 130, 95, 215, 85};
+
+        VBox root = new VBox(0);
+        root.setPadding(new Insets(12));
+        root.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        root.setPrefWidth(742);
+
+        Label title = new Label("JT Activity Log Report");
+        title.setFont(Font.font("System", FontWeight.BOLD, 14));
+        title.setTextFill(Color.web("#1e3a5f"));
+        root.getChildren().add(title);
+
+        Label info = new Label(buildPrintInfoLine());
+        info.setFont(Font.font("System", 8));
+        info.setTextFill(Color.GRAY);
+        info.setPadding(new Insets(2, 0, 6, 0));
+        root.getChildren().add(info);
+
+        root.getChildren().add(buildLogRow(
+            new String[]{"Date / 日期", "JT No.", "JT Name / 名稱", "Action / 動作", "Details / 詳情", "Operator / 操作者"},
+            colWidths, true, true));
+
+        for (int i = 0; i < currentResults.size(); i++) {
+            JigLog log = currentResults.get(i);
+            root.getChildren().add(buildLogRow(new String[]{
+                log.getCreatedAt() != null ? log.getCreatedAt().format(DT_FMT) : "-",
+                log.getJig() != null ? log.getJig().getJigNo() : "-",
+                log.getJig() != null && log.getJig().getJigName() != null ? log.getJig().getJigName() : "-",
+                actionTypeLabel(log.getActionType()),
+                formatDetails(log).isEmpty() ? "-" : formatDetails(log),
+                log.getUser() != null ? log.getUser().getUsername() : "-"
+            }, colWidths, false, i % 2 == 0));
+        }
+
+        root.applyCss();
+        root.layout();
+        return root;
+    }
+
+    private HBox buildLogRow(String[] cells, double[] widths, boolean isHeader, boolean isLight) {
+        HBox row = new HBox(0);
+        Color bg = isHeader ? Color.web("#1e3a5f")
+                 : (isLight ? Color.WHITE : Color.web("#f8fafc"));
+        row.setBackground(new Background(new BackgroundFill(bg, CornerRadii.EMPTY, Insets.EMPTY)));
+        for (int i = 0; i < cells.length; i++) {
+            Label cell = new Label(cells[i]);
+            cell.setPrefWidth(widths[i]);
+            cell.setMinWidth(widths[i]);
+            cell.setMaxWidth(widths[i]);
+            cell.setPadding(new Insets(2, 4, 2, 4));
+            cell.setFont(Font.font("System", isHeader ? FontWeight.BOLD : FontWeight.NORMAL, 8));
+            cell.setTextFill(isHeader ? Color.WHITE : Color.web("#333333"));
+            row.getChildren().add(cell);
+        }
+        return row;
+    }
+
+    private String buildPrintInfoLine() {
+        String fromStr = fromDatePicker.getValue() != null ? fromDatePicker.getValue().toString() : "-";
+        String toStr   = toDatePicker.getValue() != null   ? toDatePicker.getValue().toString()
+                                                           : LocalDate.now().toString();
+        ActionTypeItem typeItem = actionTypeFilter.getValue();
+        String actionStr = (typeItem != null && typeItem.type() != null) ? typeItem.label() : "All Actions";
+        String opStr = operatorFilter.getValue();
+        if (opStr == null || opStr.isBlank()) opStr = "All Operators";
+        return "Period: " + fromStr + " -> " + toStr
+            + "   |   Action: " + actionStr
+            + "   |   Operator: " + opStr
+            + "   |   Records: " + currentResults.size()
+            + "   |   Printed: " + LocalDateTime.now().format(DT_FMT);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
 
     private String formatDetails(JigLog log) {
         if (log.getActionType() == null) return "";
@@ -262,26 +371,26 @@ public class LogViewController {
     private String actionTypeLabel(JigLogActionType t) {
         if (t == null) return "";
         return switch (t) {
-            case CREATE         -> "Create / 新增";
-            case UPDATE         -> "Update / 編輯";
-            case DELETE         -> "Delete / 刪除";
-            case STATUS_CHANGE  -> "Status / 狀態變更";
+            case CREATE          -> "Create / 新增";
+            case UPDATE          -> "Update / 編輯";
+            case DELETE          -> "Delete / 刪除";
+            case STATUS_CHANGE   -> "Status / 狀態變更";
             case DUE_DATE_CHANGE -> "Due Date / 到期日";
-            case NOTE           -> "Note / 備註";
-            case FILE_UPLOAD    -> "File Upload / 上傳";
-            case FILE_REPLACE   -> "File Replace / 替換";
-            case FILE_DELETE    -> "File Delete / 刪除檔案";
+            case NOTE            -> "Note / 備註";
+            case FILE_UPLOAD     -> "File Upload / 上傳";
+            case FILE_REPLACE    -> "File Replace / 替換";
+            case FILE_DELETE     -> "File Delete / 刪除檔案";
         };
     }
 
     private String actionBadgeStyle(JigLogActionType t) {
         if (t == null) return "";
         return switch (t) {
-            case CREATE                      -> "jig-log-badge-create";
-            case UPDATE, NOTE, DUE_DATE_CHANGE -> "jig-log-badge-update";
-            case DELETE, FILE_DELETE         -> "jig-log-badge-delete";
-            case STATUS_CHANGE               -> "jig-log-badge-status";
-            case FILE_UPLOAD, FILE_REPLACE   -> "jig-log-badge-file";
+            case CREATE                          -> "jig-log-badge-create";
+            case UPDATE, NOTE, DUE_DATE_CHANGE   -> "jig-log-badge-update";
+            case DELETE, FILE_DELETE             -> "jig-log-badge-delete";
+            case STATUS_CHANGE                   -> "jig-log-badge-status";
+            case FILE_UPLOAD, FILE_REPLACE       -> "jig-log-badge-file";
         };
     }
 

@@ -84,7 +84,7 @@ UI 層          JavaFX 21 (FXML + CSS)
 - [x] 狀態統計圖表（JavaFX PieChart + 各狀態件數/百分比卡片）
 - [x] 備份資料夾加入 HHmm 時間戳記
 - [x] UpdateService URL 修正（新 repo：gossipred/jig-standalone）
-- [ ] PDF 報表匯出（規劃中，不做 Excel，已有 CSV）
+- [x] PDF 報表匯出（JigPdfReportService，OpenPDF 2.0.3，Stats A4 直式 + Logs A4 橫式，CJK 字型自動偵測）
 - [ ] 列印報表
 
 ### 📦 Phase 5 — 打包與發布

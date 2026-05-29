@@ -114,6 +114,79 @@
                                     styleClass="admin-btn-primary" onAction="#handleOpenDownload"/>
                         </VBox>
                     </VBox>
+
+                    <!-- SOP Card -->
+                    <VBox styleClass="admin-card" spacing="12">
+                        <padding><Insets top="18" right="20" bottom="20" left="20"/></padding>
+                        <Label text="Update SOP / 更新操作步驟" styleClass="admin-card-title"/>
+                        <Label text="請依照以下步驟進行更新，避免資料遺失或操作錯誤。" styleClass="admin-hint-zh"/>
+                        <Separator/>
+
+                        <!-- Step 1 -->
+                        <HBox spacing="14" alignment="TOP_LEFT">
+                            <Label text="1" styleClass="admin-sop-step-num"/>
+                            <VBox spacing="3">
+                                <Label text="Backup your data first  /  先備份資料" styleClass="admin-sop-step-title"/>
+                                <Label text="前往「Backup &amp; Restore」頁籤 → 點「Backup Now」完成備份。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                                <Label text="萬一更新失敗，可從備份還原。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="admin-sop-divider"/>
+
+                        <!-- Step 2 -->
+                        <HBox spacing="14" alignment="TOP_LEFT">
+                            <Label text="2" styleClass="admin-sop-step-num"/>
+                            <VBox spacing="3">
+                                <Label text="Check for update  /  確認有新版本" styleClass="admin-sop-step-title"/>
+                                <Label text="在上方點「Check for Update」，確認有新版本後繼續。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="admin-sop-divider"/>
+
+                        <!-- Step 3 -->
+                        <HBox spacing="14" alignment="TOP_LEFT">
+                            <Label text="3" styleClass="admin-sop-step-num"/>
+                            <VBox spacing="3">
+                                <Label text="Download new JAR  /  下載新版程式" styleClass="admin-sop-step-title"/>
+                                <Label text="點「Open Download Page」，在 GitHub Releases 頁面下載最新的 .jar 檔。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                                <Label text="下載後請記住存放位置。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="admin-sop-divider"/>
+
+                        <!-- Step 4 -->
+                        <HBox spacing="14" alignment="TOP_LEFT">
+                            <Label text="4" styleClass="admin-sop-step-num"/>
+                            <VBox spacing="3">
+                                <Label text="Close the application  /  關閉程式" styleClass="admin-sop-step-title"/>
+                                <Label text="點右上角「Logout / 離開」完全關閉程式，確保資料庫已釋放。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                                <Label text="⚠  請勿直接強制關閉（Cmd+Q / 工作管理員終止），避免資料損毀。" styleClass="admin-warn-text-zh" wrapText="true" maxWidth="520"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="admin-sop-divider"/>
+
+                        <!-- Step 5 -->
+                        <HBox spacing="14" alignment="TOP_LEFT">
+                            <Label text="5" styleClass="admin-sop-step-num"/>
+                            <VBox spacing="3">
+                                <Label text="Replace the JAR file  /  替換程式檔案" styleClass="admin-sop-step-title"/>
+                                <Label text="將剛下載的新版 .jar 複製到原來舊版 .jar 的相同資料夾，並刪除舊版。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                                <Label text="例：將 jig-standalone-1.2.0.jar 放到與 jig-standalone-1.1.0.jar 相同位置，再刪除舊的。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                            </VBox>
+                        </HBox>
+                        <Separator styleClass="admin-sop-divider"/>
+
+                        <!-- Step 6 -->
+                        <HBox spacing="14" alignment="TOP_LEFT">
+                            <Label text="6" styleClass="admin-sop-step-num"/>
+                            <VBox spacing="3">
+                                <Label text="Restart the application  /  重新啟動程式" styleClass="admin-sop-step-title"/>
+                                <Label text="執行新版 .jar 啟動程式，登入後確認版本號已更新。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                                <Label text="資料庫 schema 會在啟動時自動升級，無需手動操作。" styleClass="admin-hint-zh" wrapText="true" maxWidth="520"/>
+                            </VBox>
+                        </HBox>
+
+                    </VBox>
                 </VBox>
             </ScrollPane>
         </Tab>

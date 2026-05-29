@@ -1055,3 +1055,28 @@
     -fx-font-weight: bold;
     -fx-text-fill: #111827;
 }
+
+/* ===== Update SOP ===== */
+
+.admin-sop-step-num {
+    -fx-min-width: 28px;
+    -fx-min-height: 28px;
+    -fx-max-width: 28px;
+    -fx-max-height: 28px;
+    -fx-background-color: #1e3a5f;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 14;
+    -fx-alignment: center;
+}
+
+.admin-sop-step-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.admin-sop-divider {
+    -fx-padding: 0 0 0 42;
+}

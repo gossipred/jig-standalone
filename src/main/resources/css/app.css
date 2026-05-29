@@ -1080,3 +1080,45 @@
 .admin-sop-divider {
     -fx-padding: 0 0 0 42;
 }
+
+/* ── Trial Banner ───────────────────────────────────────────────── */
+.trial-banner {
+    -fx-background-color: #fef3c7;
+    -fx-border-color: #f59e0b;
+    -fx-border-width: 0 0 1 0;
+}
+.trial-banner-icon {
+    -fx-text-fill: #92400e;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+.trial-banner-text {
+    -fx-text-fill: #78350f;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+.trial-banner-hint {
+    -fx-text-fill: #92400e;
+    -fx-font-size: 11px;
+}
+
+/* ── License screen ─────────────────────────────────────────────── */
+.success-label {
+    -fx-text-fill: #15803d;
+    -fx-font-size: 12px;
+    -fx-padding: 6 0 0 0;
+}
+
+/* ── Admin License tab ──────────────────────────────────────────── */
+.admin-info-text {
+    -fx-text-fill: #374151;
+    -fx-font-size: 13px;
+}
+.admin-input {
+    -fx-background-color: #f9fafb;
+    -fx-border-color: #d1d5db;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 6 10 6 10;
+    -fx-font-size: 13px;
+}

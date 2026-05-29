@@ -2,6 +2,10 @@ package com.jj.jig.ui.admin;
 
 import com.jj.jig.auth.UserSession;
 import com.jj.jig.backup.AutoBackupService;
+import com.jj.jig.license.AuthStatus;
+import com.jj.jig.license.LicenseInfo;
+import com.jj.jig.license.LicenseService;
+import com.jj.jig.license.LicenseValidator;
 import com.jj.jig.backup.AutoBackupSettings;
 import com.jj.jig.backup.BackupRestoreService;
 import com.jj.jig.ui.SpringFxmlLoader;
@@ -88,6 +92,15 @@ public class AdminManagementController {
     @FXML private ListView<String> backupListView;
     @FXML private Button     scheduleRestoreBtn;
 
+    // ---- License tab ----
+    @FXML private Label    licenseStatusLabel;
+    @FXML private TextField licenseMachineIdField;
+    @FXML private Label    licenseCustomerLabel;
+    @FXML private Label    licenseTypeLabel;
+    @FXML private Label    licenseExpiryLabel;
+    @FXML private Label    licenseIssuedLabel;
+    @FXML private Label    licenseLoadStatusLabel;
+
     private List<Path> availableBackupPaths = List.of();
     private String pendingDownloadUrl = null;
     private static final DateTimeFormatter DT_FMT =
@@ -100,12 +113,16 @@ public class AdminManagementController {
     private final UpdateService updateService;
     private final SpringFxmlLoader fxmlLoader;
     private final StageHolder stageHolder;
+    private final LicenseService licenseService;
+    private final LicenseValidator licenseValidator;
 
     public AdminManagementController(UserService userService, UserSession userSession,
                                      BackupRestoreService backupRestoreService,
                                      AutoBackupService autoBackupService,
                                      UpdateService updateService,
-                                     SpringFxmlLoader fxmlLoader, StageHolder stageHolder) {
+                                     SpringFxmlLoader fxmlLoader, StageHolder stageHolder,
+                                     LicenseService licenseService,
+                                     LicenseValidator licenseValidator) {
         this.userService = userService;
         this.userSession = userSession;
         this.backupRestoreService = backupRestoreService;
@@ -113,6 +130,8 @@ public class AdminManagementController {
         this.updateService = updateService;
         this.fxmlLoader = fxmlLoader;
         this.stageHolder = stageHolder;
+        this.licenseService = licenseService;
+        this.licenseValidator = licenseValidator;
     }
 
     @FXML
@@ -120,6 +139,7 @@ public class AdminManagementController {
         initUsersTab();
         initUpdateTab();
         initBackupRestoreTab();
+        initLicenseTab();
     }
 
     // ========== Users Tab ==========
@@ -544,5 +564,88 @@ public class AdminManagementController {
 
     private Stage getStage() {
         return (Stage) usersTable.getScene().getWindow();
+    }
+
+    // ========== License Tab ==========
+
+    private void initLicenseTab() {
+        licenseMachineIdField.setText(licenseService.getMachineId());
+        refreshLicenseDisplay();
+    }
+
+    private void refreshLicenseDisplay() {
+        AuthStatus status = licenseService.checkAuthorization();
+        LicenseInfo info = status.license();
+
+        licenseStatusLabel.setText(switch (status.state()) {
+            case MASTER     -> "Master License / 萬用授權";
+            case LICENSED   -> "Active / 授權有效";
+            case TRIAL      -> "Trial / 試用期 (" + status.trialDaysLeft() + " days left)";
+            case EXPIRED    -> "Expired / 已到期";
+            case INVALID    -> "Invalid / 授權無效";
+        });
+
+        if (info != null) {
+            licenseCustomerLabel.setText("Customer: " + info.customer());
+            licenseTypeLabel.setText("Type: " + info.type().name());
+            licenseExpiryLabel.setText("Expires: " +
+                (info.expiresAt() != null ? info.expiresAt() : "Never / 永久"));
+            licenseIssuedLabel.setText("Issued: " +
+                (info.issuedAt() != null ? info.issuedAt() : "—"));
+        } else {
+            licenseCustomerLabel.setText("Customer: —");
+            licenseTypeLabel.setText("Type: —");
+            licenseExpiryLabel.setText("Expires: —");
+            licenseIssuedLabel.setText("Issued: —");
+        }
+    }
+
+    @FXML
+    public void handleCopyMachineId() {
+        javafx.scene.input.ClipboardContent content = new javafx.scene.input.ClipboardContent();
+        content.putString(licenseMachineIdField.getText());
+        javafx.scene.input.Clipboard.getSystemClipboard().setContent(content);
+        licenseLoadStatusLabel.setText("Machine ID copied! / 機器 ID 已複製。");
+        licenseLoadStatusLabel.setStyle("-fx-text-fill: #15803d;");
+        licenseLoadStatusLabel.setVisible(true);
+        licenseLoadStatusLabel.setManaged(true);
+    }
+
+    @FXML
+    public void handleLoadLicenseFile() {
+        javafx.stage.FileChooser chooser = new javafx.stage.FileChooser();
+        chooser.setTitle("Select License File / 選擇授權檔");
+        chooser.getExtensionFilters().add(
+            new javafx.stage.FileChooser.ExtensionFilter("License Files", "*.lic"));
+        java.io.File file = chooser.showOpenDialog(getStage());
+        if (file == null) return;
+
+        var info = licenseValidator.loadFrom(file.toPath());
+        if (info.isEmpty()) {
+            licenseLoadStatusLabel.setText("Invalid license file / 授權檔無效或已損壞。");
+            licenseLoadStatusLabel.setStyle("-fx-text-fill: #dc2626;");
+            licenseLoadStatusLabel.setVisible(true);
+            licenseLoadStatusLabel.setManaged(true);
+            return;
+        }
+
+        try {
+            java.nio.file.Path dest = LicenseValidator.LICENSE_FILE;
+            java.nio.file.Files.createDirectories(dest.getParent());
+            java.nio.file.Files.copy(file.toPath(), dest, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+            licenseLoadStatusLabel.setText("Failed to install: " + e.getMessage());
+            licenseLoadStatusLabel.setStyle("-fx-text-fill: #dc2626;");
+            licenseLoadStatusLabel.setVisible(true);
+            licenseLoadStatusLabel.setManaged(true);
+            return;
+        }
+
+        licenseService.invalidateCache();
+        refreshLicenseDisplay();
+        licenseLoadStatusLabel.setText("License installed successfully! / 授權已成功安裝。");
+        licenseLoadStatusLabel.setStyle("-fx-text-fill: #15803d;");
+        licenseLoadStatusLabel.setVisible(true);
+        licenseLoadStatusLabel.setManaged(true);
     }
 }

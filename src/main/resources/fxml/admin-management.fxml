@@ -290,5 +290,51 @@
             </VBox>
         </Tab>
 
+        <!-- ====== Tab 5: License ====== -->
+        <Tab text="&#x1F511;  License / 授權管理">
+            <VBox spacing="16">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+
+                <!-- Status row -->
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <Label text="Status / 授權狀態：" styleClass="admin-section-title"/>
+                    <Label fx:id="licenseStatusLabel" text="—" styleClass="admin-warn-text"/>
+                </HBox>
+
+                <!-- Machine ID -->
+                <VBox spacing="4">
+                    <Label text="Machine ID / 機器 ID" styleClass="admin-section-title"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT">
+                        <TextField fx:id="licenseMachineIdField" editable="false"
+                                   styleClass="admin-input" prefWidth="380"/>
+                        <Button text="Copy" styleClass="admin-btn-outline"
+                                onAction="#handleCopyMachineId"/>
+                    </HBox>
+                </VBox>
+
+                <!-- License detail -->
+                <VBox spacing="4">
+                    <Label text="License Details / 授權資訊" styleClass="admin-section-title"/>
+                    <Label fx:id="licenseCustomerLabel"  text="Customer: —" styleClass="admin-info-text"/>
+                    <Label fx:id="licenseTypeLabel"      text="Type: —"     styleClass="admin-info-text"/>
+                    <Label fx:id="licenseExpiryLabel"    text="Expires: —"  styleClass="admin-info-text"/>
+                    <Label fx:id="licenseIssuedLabel"    text="Issued: —"   styleClass="admin-info-text"/>
+                </VBox>
+
+                <Separator/>
+
+                <!-- Load license -->
+                <VBox spacing="8">
+                    <Label text="Load / Replace License File / 載入或更換授權檔"
+                           styleClass="admin-section-title"/>
+                    <Button text="&#x1F4C2;  Load License File (.lic)"
+                            styleClass="admin-btn-outline" onAction="#handleLoadLicenseFile"/>
+                    <Label fx:id="licenseLoadStatusLabel" styleClass="admin-warn-text"
+                           visible="false" managed="false" wrapText="true"/>
+                </VBox>
+
+            </VBox>
+        </Tab>
+
     </TabPane>
 </VBox>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.jj.jig.ui.license.LicenseScreenController"
+      styleClass="login-root">
+
+    <!-- Left panel: branding -->
+    <VBox styleClass="login-left" HBox.hgrow="ALWAYS" spacing="0">
+        <padding><Insets top="48" right="48" bottom="40" left="48"/></padding>
+        <Label text="FIXTURE CONTROL / MAINTENANCE RECORDS" styleClass="login-left-tag"/>
+        <Region prefHeight="28"/>
+        <Label text="Jig &amp; Toolings" styleClass="login-left-title"/>
+        <Label text="Management System" styleClass="login-left-title"/>
+        <Label text="治具及模具管理系統" styleClass="login-left-title-zh"/>
+        <Region prefHeight="20"/>
+        <Label text="Activation Required / 需要授權才能使用本系統。"
+               styleClass="login-left-desc" wrapText="true"/>
+        <Region VBox.vgrow="ALWAYS"/>
+        <HBox spacing="8">
+            <Label text="30-Day Trial"   styleClass="login-feature-tag"/>
+            <Label text="Per-Machine"    styleClass="login-feature-tag"/>
+            <Label text="RSA-Signed"     styleClass="login-feature-tag"/>
+        </HBox>
+    </VBox>
+
+    <!-- Right panel: license info -->
+    <VBox styleClass="login-right" minWidth="400" maxWidth="400" spacing="0">
+        <padding><Insets top="44" right="40" bottom="40" left="40"/></padding>
+
+        <Label fx:id="titleLabel"
+               text="License Required / 需要授權"
+               styleClass="login-card-title" wrapText="true"/>
+        <Label fx:id="subtitleLabel"
+               text="Your 30-day trial has expired. Please contact us for a license."
+               styleClass="login-card-title-zh" wrapText="true"/>
+
+        <Region prefHeight="24"/>
+
+        <Label text="Machine ID / 機器 ID" styleClass="field-label"/>
+        <Label text="請將以下 ID 提供給發行者以取得授權檔" styleClass="field-label-zh"/>
+        <Region prefHeight="4"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <TextField fx:id="machineIdField" editable="false"
+                       styleClass="login-input" HBox.hgrow="ALWAYS"/>
+            <Button text="Copy" styleClass="jig-btn-outline"
+                    onAction="#handleCopyMachineId" minWidth="60"/>
+        </HBox>
+
+        <Region prefHeight="20"/>
+
+        <Label text="License File / 授權檔" styleClass="field-label"/>
+        <Label text="取得 .lic 授權檔後，點下方按鈕載入" styleClass="field-label-zh"/>
+        <Region prefHeight="8"/>
+        <Button text="Load License File / 載入授權檔 (.lic)"
+                styleClass="login-btn" onAction="#handleLoadLicense"
+                maxWidth="Infinity"/>
+
+        <Label fx:id="statusLabel" styleClass="error-label"
+               visible="false" managed="false" wrapText="true"/>
+
+        <Region prefHeight="20"/>
+
+        <Label text="Contact / 聯絡方式" styleClass="field-label"/>
+        <Label text="gossipred@gmail.com" styleClass="login-footer-en"/>
+    </VBox>
+
+</HBox>

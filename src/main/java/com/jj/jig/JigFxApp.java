@@ -2,6 +2,8 @@ package com.jj.jig;
 
 import com.jj.jig.backup.AutoBackupService;
 import com.jj.jig.backup.BackupRestoreService;
+import com.jj.jig.license.AuthStatus;
+import com.jj.jig.license.LicenseService;
 import com.jj.jig.ui.SpringFxmlLoader;
 import com.jj.jig.ui.StageHolder;
 import com.jj.jig.uninstall.UninstallService;
@@ -36,7 +38,9 @@ public class JigFxApp extends Application {
         new Thread(() ->
                 springContext.getBean(AutoBackupService.class).checkAndRunAutoBackup()).start();
 
-        Parent loginRoot = springContext.getBean(SpringFxmlLoader.class).load("/fxml/login.fxml");
+        AuthStatus authStatus = springContext.getBean(LicenseService.class).checkAuthorization();
+        String firstFxml = authStatus.isAllowed() ? "/fxml/login.fxml" : "/fxml/license-screen.fxml";
+        Parent loginRoot = springContext.getBean(SpringFxmlLoader.class).load(firstFxml);
 
         Scene scene = new Scene(loginRoot, 960, 600);
         scene.getStylesheets().add(getClass().getResource("/css/app.css").toExternalForm());

@@ -24,3 +24,4 @@ JJ jig toolings customer handoff package.zip
 # Generated preview/dependency folders
 **/node_modules/
 **/docx-preview/
+tools/LicenseTool.class

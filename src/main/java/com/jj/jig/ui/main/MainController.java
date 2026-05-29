@@ -1,6 +1,9 @@
 package com.jj.jig.ui.main;
 
 import com.jj.jig.auth.UserSession;
+import com.jj.jig.license.AuthState;
+import com.jj.jig.license.AuthStatus;
+import com.jj.jig.license.LicenseService;
 import com.jj.jig.ui.SpringFxmlLoader;
 import com.jj.jig.ui.StageHolder;
 import com.jj.jig.user.UserRole;
@@ -29,18 +32,22 @@ public class MainController {
     @FXML private Button navJigsBtn;
     @FXML private Button navLogsBtn;
     @FXML private Button navStatsBtn;
+    @FXML private javafx.scene.layout.HBox trialBanner;
+    @FXML private Label trialBannerLabel;
 
     private Button activeNavBtn;
 
     private final UserSession userSession;
     private final SpringFxmlLoader fxmlLoader;
     private final StageHolder stageHolder;
+    private final LicenseService licenseService;
 
     public MainController(UserSession userSession, SpringFxmlLoader fxmlLoader,
-                          StageHolder stageHolder) {
+                          StageHolder stageHolder, LicenseService licenseService) {
         this.userSession = userSession;
         this.fxmlLoader = fxmlLoader;
         this.stageHolder = stageHolder;
+        this.licenseService = licenseService;
     }
 
     @FXML
@@ -49,6 +56,14 @@ public class MainController {
         boolean isAdmin = userSession.getCurrentUser().getRole() == UserRole.ADMIN;
         adminBtn.setVisible(isAdmin);
         adminBtn.setManaged(isAdmin);
+
+        AuthStatus status = licenseService.checkAuthorization();
+        if (status.state() == AuthState.TRIAL) {
+            trialBannerLabel.setText(
+                "Trial Mode / 試用期：剩餘 " + status.trialDaysLeft() + " 天 (" + status.trialDaysLeft() + " days remaining)");
+            trialBanner.setVisible(true);
+            trialBanner.setManaged(true);
+        }
 
         handleNavJigs();
     }

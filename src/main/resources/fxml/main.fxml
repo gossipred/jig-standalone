@@ -35,6 +35,16 @@
                 <Button fx:id="navStatsBtn" text="◑  Stats / 統計"       styleClass="main-nav-btn" onAction="#handleNavStats"/>
             </HBox>
             <Separator/>
+            <!-- Trial Banner (shown only when in trial mode) -->
+            <HBox fx:id="trialBanner" styleClass="trial-banner" alignment="CENTER_LEFT" spacing="8"
+                  visible="false" managed="false">
+                <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+                <Label text="Trial Mode / 試用期" styleClass="trial-banner-icon"/>
+                <Label fx:id="trialBannerLabel" styleClass="trial-banner-text"
+                       text="30 days remaining / 天剩餘"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Purchase license at gossipred@gmail.com" styleClass="trial-banner-hint"/>
+            </HBox>
         </VBox>
     </top>
 

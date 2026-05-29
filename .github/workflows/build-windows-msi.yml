@@ -27,7 +27,8 @@ jobs:
       - name: Read version from pom.xml
         id: version
         run: |
-          $v = mvn help:evaluate -Dexpression=project.version -q -DforceStdout
+          $xml = [xml](Get-Content pom.xml)
+          $v = $xml.project.version
           echo "VERSION=$v" >> $env:GITHUB_OUTPUT
 
       - name: Build fat JAR

@@ -145,3 +145,16 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 - GitHub Release `v1.2.0` 已附上 jar + dmg + msi 三個檔案，`version.json` 已同步更新
 
 **下一步：** 目前無已知待辦。
+
+## v1.2.1 — 2026-09-18
+
+**修正：** App 圖示換成 JJ 提供的 Aura Studio 品牌圖示（紫底金色 uA + 扳手/齒輪），取代 jpackage 預設的 Java 咖啡杯圖示。純打包修正，功能跟 v1.2.0 相同。
+
+**圖示檔案：** `assets/icons/app-icon.icns`（macOS）、`assets/icons/app-icon.ico`（Windows）、`assets/icons/app-icon-source.png`（原始 1920x1920 PNG，來源 `/Volumes/SSD2TB/aurastudio project/aura logo/icon for aura/App Icon - jig Flat Modern.png`）已存進 repo。
+
+**發版紀錄：**
+- `build-windows-msi.yml` 加了 `--icon "assets\icons\app-icon.ico"` 給 jpackage
+- macOS jpackage 本機指令加 `--icon .../app-icon.icns`，掛載 dmg 用 `plutil`/`ls Resources` 驗證過 icns 真的被嵌進 `.app` 裡
+- Tag `v1.2.1` → Windows CI 成功 → GitHub Release `v1.2.1`（jar+dmg+msi）→ `version.json` 已同步
+
+**下一步：** 目前無已知待辦。

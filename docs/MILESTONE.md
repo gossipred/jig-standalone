@@ -132,5 +132,16 @@ Phase 5  [░░░░░░░░░░]   0%  📋 規劃中
 
 ## 下一步行動
 
-1. 建立 GitHub Release `v1.1.0`，附上 macOS .dmg 和 Windows .msi
-2. 更新 version.json（配合 UpdateService 版本檢查）
+~~1. 建立 GitHub Release `v1.1.0`，附上 macOS .dmg 和 Windows .msi~~ ✅ 完成（2026-05-29）
+~~2. 更新 version.json（配合 UpdateService 版本檢查）~~ ✅ 完成（2026-05-29）
+
+## v1.2.0 — 2026-09-18
+
+**新功能：** 公司/部門名稱品牌設定（Admin Management → Settings，登入畫面顯示）、Aura Studio logo（登入畫面/主視窗頂列/Admin 頁頭）。
+
+**發版紀錄：**
+- Tag `v1.2.0` → 觸發 `build-windows-msi.yml` CI 自動建置 Windows MSI
+- macOS .dmg 本機用 jlink（JavaFX 21.0.5 osx-aarch64 jmods）+ jpackage 手動打包（`~/javafx-jmods/custom-jre-v2/` 舊快取已不在，這次重新下載建置，沒有另存快取）
+- GitHub Release `v1.2.0` 已附上 jar + dmg + msi 三個檔案，`version.json` 已同步更新
+
+**下一步：** 目前無已知待辦。

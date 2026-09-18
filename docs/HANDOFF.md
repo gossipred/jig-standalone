@@ -1,8 +1,8 @@
 # Handoff Guide — Jig & Toolings Management System (Standalone)
 # 安裝移交說明文件
 
-**版本：** 1.0.0  
-**更新：** 2026-05-29  
+**版本：** 1.2.0  
+**更新：** 2026-09-18  
 **適用：** 系統管理員 / IT 人員
 
 ---

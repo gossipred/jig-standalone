@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
@@ -20,6 +22,10 @@
             <Insets top="48" right="48" bottom="40" left="48"/>
         </padding>
 
+        <ImageView fitHeight="56" preserveRatio="true">
+            <image><Image url="@../images/aura-logo.png"/></image>
+        </ImageView>
+        <Region prefHeight="16"/>
         <Label text="FIXTURE CONTROL / MAINTENANCE RECORDS" styleClass="login-left-tag"/>
         <Region prefHeight="28"/>
         <Label text="Jig &amp; Toolings" styleClass="login-left-title"/>

@@ -13,6 +13,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -24,6 +26,9 @@
     <!-- Header -->
     <HBox styleClass="admin-header" alignment="CENTER_LEFT" spacing="12">
         <padding><Insets top="16" right="24" bottom="16" left="24"/></padding>
+        <ImageView fitHeight="26" preserveRatio="true">
+            <image><Image url="@../images/aura-logo.png"/></image>
+        </ImageView>
         <Label text="&#x2699;  Admin Management" styleClass="admin-header-title"/>
         <Label text="/  管理員操作設定" styleClass="admin-header-title-zh"/>
     </HBox>

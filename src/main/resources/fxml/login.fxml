@@ -48,6 +48,10 @@
             <Insets top="44" right="40" bottom="40" left="40"/>
         </padding>
 
+        <Label fx:id="organizationNameLabel" styleClass="login-org-name" wrapText="true"
+               visible="false" managed="false"/>
+        <Region fx:id="organizationNameSpacer" prefHeight="10" visible="false" managed="false"/>
+
         <Label text="Jig &amp; Toolings Management Login" styleClass="login-card-title" wrapText="true"/>
         <Label text="治具及模具管理系統登入" styleClass="login-card-title-zh"/>
 

@@ -2,6 +2,7 @@ package com.jj.jig.ui.login;
 
 import com.jj.jig.auth.AuthService;
 import com.jj.jig.auth.UserSession;
+import com.jj.jig.settings.SystemSettingsService;
 import com.jj.jig.ui.SpringFxmlLoader;
 import com.jj.jig.ui.StageHolder;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,8 @@ public class LoginController {
     @FXML private Button togglePasswordBtn;
     @FXML private Label errorLabel;
     @FXML private Button loginButton;
+    @FXML private Label organizationNameLabel;
+    @FXML private Region organizationNameSpacer;
 
     private boolean passwordShown = false;
 
@@ -33,13 +37,27 @@ public class LoginController {
     private final UserSession userSession;
     private final StageHolder stageHolder;
     private final SpringFxmlLoader fxmlLoader;
+    private final SystemSettingsService systemSettingsService;
 
     public LoginController(AuthService authService, UserSession userSession,
-                           StageHolder stageHolder, SpringFxmlLoader fxmlLoader) {
+                           StageHolder stageHolder, SpringFxmlLoader fxmlLoader,
+                           SystemSettingsService systemSettingsService) {
         this.authService = authService;
         this.userSession = userSession;
         this.stageHolder = stageHolder;
         this.fxmlLoader = fxmlLoader;
+        this.systemSettingsService = systemSettingsService;
+    }
+
+    @FXML
+    public void initialize() {
+        String organizationName = systemSettingsService.loadSettings().getOrganizationName();
+        boolean hasName = organizationName != null && !organizationName.isBlank();
+        organizationNameLabel.setText(organizationName);
+        organizationNameLabel.setVisible(hasName);
+        organizationNameLabel.setManaged(hasName);
+        organizationNameSpacer.setVisible(hasName);
+        organizationNameSpacer.setManaged(hasName);
     }
 
     @FXML

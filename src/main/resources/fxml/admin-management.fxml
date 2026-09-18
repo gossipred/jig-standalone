@@ -32,6 +32,27 @@
     <!-- TabPane -->
     <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" styleClass="admin-tabpane">
 
+        <!-- ====== Tab 0: Settings ====== -->
+        <Tab text="&#x2699;  Settings / 系統設定">
+            <VBox alignment="TOP_LEFT" spacing="16">
+                <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+                <VBox styleClass="admin-card" spacing="10">
+                    <padding><Insets top="18" right="20" bottom="18" left="20"/></padding>
+                    <Label text="Company / Department Name" styleClass="admin-section-title"/>
+                    <Label text="公司名稱 / 部門名稱" styleClass="admin-field-label-zh"/>
+                    <Separator/>
+                    <TextField fx:id="organizationNameField" styleClass="admin-input" prefWidth="380"/>
+                    <Label text="Shown on the login screen. Leave blank to hide it."
+                           styleClass="admin-field-label"/>
+                    <Label text="會顯示在登入畫面上，留空則不顯示。"
+                           styleClass="admin-field-label-zh"/>
+                    <Region prefHeight="4"/>
+                    <Button text="Save / 儲存" styleClass="admin-btn-primary"
+                            onAction="#handleSaveSystemSettings"/>
+                </VBox>
+            </VBox>
+        </Tab>
+
         <!-- ====== Tab 1: Users ====== -->
         <Tab text="&#x1F465;  Users / 帳號管理">
             <VBox spacing="0">

@@ -59,6 +59,12 @@
     -fx-background-color: #ffffff;
 }
 
+.login-org-name {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
 .login-card-title {
     -fx-font-size: 20px;
     -fx-font-weight: bold;

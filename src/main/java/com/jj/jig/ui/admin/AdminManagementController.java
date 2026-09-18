@@ -8,6 +8,8 @@ import com.jj.jig.license.LicenseService;
 import com.jj.jig.license.LicenseValidator;
 import com.jj.jig.backup.AutoBackupSettings;
 import com.jj.jig.backup.BackupRestoreService;
+import com.jj.jig.settings.SystemSettings;
+import com.jj.jig.settings.SystemSettingsService;
 import com.jj.jig.ui.SpringFxmlLoader;
 import com.jj.jig.ui.StageHolder;
 import com.jj.jig.update.UpdateCheckResult;
@@ -57,6 +59,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class AdminManagementController {
+
+    // ---- Settings tab ----
+    @FXML private TextField organizationNameField;
 
     // ---- Users tab ----
     @FXML private TableView<User>    usersTable;
@@ -115,6 +120,7 @@ public class AdminManagementController {
     private final StageHolder stageHolder;
     private final LicenseService licenseService;
     private final LicenseValidator licenseValidator;
+    private final SystemSettingsService systemSettingsService;
 
     public AdminManagementController(UserService userService, UserSession userSession,
                                      BackupRestoreService backupRestoreService,
@@ -122,7 +128,8 @@ public class AdminManagementController {
                                      UpdateService updateService,
                                      SpringFxmlLoader fxmlLoader, StageHolder stageHolder,
                                      LicenseService licenseService,
-                                     LicenseValidator licenseValidator) {
+                                     LicenseValidator licenseValidator,
+                                     SystemSettingsService systemSettingsService) {
         this.userService = userService;
         this.userSession = userSession;
         this.backupRestoreService = backupRestoreService;
@@ -132,14 +139,36 @@ public class AdminManagementController {
         this.stageHolder = stageHolder;
         this.licenseService = licenseService;
         this.licenseValidator = licenseValidator;
+        this.systemSettingsService = systemSettingsService;
     }
 
     @FXML
     public void initialize() {
+        initSettingsTab();
         initUsersTab();
         initUpdateTab();
         initBackupRestoreTab();
         initLicenseTab();
+    }
+
+    // ========== Settings Tab ==========
+
+    private void initSettingsTab() {
+        organizationNameField.setText(systemSettingsService.loadSettings().getOrganizationName());
+    }
+
+    @FXML
+    public void handleSaveSystemSettings() {
+        SystemSettings settings = systemSettingsService.loadSettings();
+        settings.setOrganizationName(organizationNameField.getText().trim());
+        try {
+            systemSettingsService.saveSettings(settings);
+            showAlert(AlertType.INFORMATION, "Saved / 已儲存",
+                    "System settings updated. Log out to see the change on the login screen.\n"
+                            + "系統設定已更新，登出後即可在登入畫面看到變更。");
+        } catch (IOException e) {
+            showAlert(AlertType.ERROR, "Save Failed / 儲存失敗", e.getMessage());
+        }
     }
 
     // ========== Users Tab ==========

@@ -1,7 +1,7 @@
 {
-  "version": "1.2.0",
+  "version": "1.2.1",
   "releaseDate": "2026-09-18",
-  "downloadUrl": "https://github.com/gossipred/jig-standalone/releases/tag/v1.2.0",
-  "releaseNotes": "Configurable company/department name shown on the login screen (Admin Management → Settings), plus Aura Studio branding on the login, main topbar, and admin header.",
-  "releaseNotesZh": "新增可設定的公司/部門名稱，顯示於登入畫面（Admin Management → Settings 設定）；登入畫面、主視窗頂列與管理頁頭加上 Aura Studio 品牌 logo。"
+  "downloadUrl": "https://github.com/gossipred/jig-standalone/releases/tag/v1.2.1",
+  "releaseNotes": "App icon fix: replaced the default Java icon with the Aura Studio branded icon on macOS and Windows.",
+  "releaseNotesZh": "修正 App 圖示：macOS 與 Windows 都換成 Aura Studio 品牌圖示，取代原本的 Java 預設圖示。"
 }
